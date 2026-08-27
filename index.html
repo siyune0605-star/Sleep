@@ -1,666 +1,393 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EEG-SleepAnalyzer | 뇌파 기반 수면 분석 & 장애 조기 탐지</title>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --accent-purple: #8b5cf6;
-      --accent-blue: #3b82f6;
-      --accent-cyan: #06b6d4;
-      --accent-pink: #ec4899;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --warning-red: #ef4444;
-      --success-green: #10b981;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepWell - 수면 관리 앱</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      padding-bottom: 60px;
-    }
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #1e293b;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+        }
 
-    /* Auth Overlay */
-    .auth-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        .auth-card, .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-    .auth-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 32px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-    }
+        .hidden {
+            display: none !important;
+        }
 
-    .auth-card h2 {
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--accent-purple);
-    }
+        h2 {
+            color: #38bdf8;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
 
-    /* Layout */
-    header {
-      background: rgba(30, 41, 59, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 16px 24px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-    .logo {
-      font-weight: 700;
-      font-size: 1.25rem;
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        label {
+            font-size: 13px;
+            color: #94a3b8;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 24px auto;
-      padding: 0 16px;
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 24px;
-    }
+        input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background-color: #0f172a;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
 
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-    }
+        input:focus {
+            border-color: #38bdf8;
+        }
 
-    /* Cards */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
+        button {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: #38bdf8;
+            color: #0f172a;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
 
-    .card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+        button:hover {
+            opacity: 0.9;
+        }
 
-    /* Form Elements */
-    .form-group {
-      margin-bottom: 16px;
-    }
+        .secondary-btn {
+            background-color: transparent;
+            color: #94a3b8;
+            border: 1px solid #475569;
+        }
 
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
+        .message-box {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
 
-    input[type="text"], input[type="password"], input[type="number"], select {
-      width: 100%;
-      padding: 10px 12px;
-      background: #0f172a;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      color: var(--text-main);
-      font-size: 0.9rem;
-    }
+        .message-box.error {
+            display: block;
+            background-color: #451a03;
+            color: #f97316;
+            border: 1px solid #7c2d12;
+        }
 
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--accent-purple);
-    }
+        .message-box.success {
+            display: block;
+            background-color: #064e3b;
+            color: #34d399;
+            border: 1px solid #065f46;
+        }
 
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
+        /* 대시보드 스타일 */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 12px;
+        }
 
-    .btn:hover {
-      opacity: 0.9;
-    }
+        .user-info {
+            font-size: 14px;
+            color: #cbd5e1;
+        }
 
-    /* Concept Badge Section */
-    .concept-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
-    .concept-box {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 0.8rem;
-    }
+        .stat-card {
+            background-color: #0f172a;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            text-align: center;
+        }
 
-    .concept-box strong {
-      display: block;
-      color: var(--accent-cyan);
-      margin-bottom: 4px;
-    }
+        .stat-card .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-top: 4px;
+        }
 
-    /* Status & Alerts */
-    .alert {
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
+        .record-card {
+            background-color: #0f172a;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-    .alert-warning {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid var(--warning-red);
-      color: #fca5a5;
-    }
+        .log-list {
+            max-height: 150px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-    .alert-info {
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid var(--accent-blue);
-      color: #93c5fd;
-    }
-
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .metric-card {
-      background: #0f172a;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-      text-align: center;
-    }
-
-    .metric-card .value {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      margin: 4px 0;
-    }
-
-    .metric-card .label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    /* Chart wrappers */
-    .chart-container {
-      position: relative;
-      height: 260px;
-      width: 100%;
-      margin-bottom: 16px;
-    }
-
-    .file-upload-wrapper {
-      border: 2px dashed var(--card-border);
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      background: #0f172a;
-      transition: border-color 0.2s;
-    }
-
-    .file-upload-wrapper:hover {
-      border-color: var(--accent-purple);
-    }
-
-    .data-source-tag {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    ul.rec-list {
-      padding-left: 20px;
-      font-size: 0.9rem;
-      color: #cbd5e1;
-    }
-
-    ul.rec-list li {
-      margin-bottom: 8px;
-    }
-  </style>
+        .log-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background-color: #1e293b;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- 인증 시스템 레이어 -->
-  <div id="authOverlay" class="auth-overlay">
-    <div class="auth-card">
-      <h2 id="authTitle">SleepEEG 로그인</h2>
-      <form id="authForm" onsubmit="handleAuth(event)">
-        <div class="form-group">
-          <label for="username">사용자 아이디 (학생/사용자)</label>
-          <input type="text" id="username" required placeholder="예: 20416_이시윤">
+<div class="app-container">
+    <!-- 인증 화면 (회원가입/로그인) -->
+    <div id="authScreen" class="auth-card">
+        <h2 id="authTitle">SleepWell 회원가입</h2>
+        <div class="input-group">
+            <label for="email">이메일 계정</label>
+            <input type="email" id="email" placeholder="example@email.com" required>
         </div>
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input type="password" id="password" required placeholder="••••••••">
+        <div class="input-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" placeholder="8자 이상, 영문+숫자" required>
         </div>
-        <button type="submit" class="btn" id="authBtn">로그인 / 시작하기</button>
-      </form>
+        
+        <button id="authPrimaryBtn">가입하기</button>
+        <button id="authToggleBtn" class="secondary-btn">로그인 화면으로 이동</button>
+        
+        <div id="authMessage" class="message-box"></div>
     </div>
-  </div>
 
-  <!-- 상단 헤더 -->
-  <header>
-    <div class="logo">🌙 SleepEEG MindGuard v1.0</div>
-    <div style="font-size: 0.85rem; color: var(--text-muted);">
-      사용자: <span id="userDisplay" style="color: var(--text-main); font-weight: 600;">비로그인</span> | 
-      분야: <span style="color: var(--accent-cyan);">생명공학·뇌과학</span>
-    </div>
-  </header>
-
-  <div class="container">
-    <!-- 좌측 사이드바: 입력 및 핵심 원리/개념 -->
-    <div class="sidebar">
-      
-      <!-- 프로젝트 핵심 개념 4개 -->
-      <div class="card">
-        <h3>🧠 핵심 개념 및 메커니즘</h3>
-        <div class="concept-grid">
-          <div class="concept-box">
-            <strong>수면 구조</strong>
-            N1·N2(얕은잠), N3(깊은잠), REM, 각성의 cycle 구조
-          </div>
-          <div class="concept-box">
-            <strong>EEG 주파수 대역</strong>
-            δ(델타), θ(세타), α(알파), β(베타) 분해
-          </div>
-          <div class="concept-box">
-            <strong>시계열 분류</strong>
-            30초 Epoch 단위 데이터 자동 맵핑
-          </div>
-          <div class="concept-box">
-            <strong>이상치 탐지</strong>
-            AASM 임상 기준 대비 편차 조기 발견
-          </div>
+    <!-- 수면 관리 대시보드 화면 -->
+    <div id="dashboardScreen" class="dashboard hidden">
+        <div class="header-bar">
+            <span class="user-info"><b id="currentUser"></b> 님</span>
+            <button id="logoutBtn" class="secondary-btn" style="padding: 6px 12px; font-size: 12px;">로그아웃</button>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
-          <strong>뇌파 주파수 원리:</strong> 깨어있을 때의 빠른 베타파(β)는 수면 진행에 따라 세타파(θ), 깊은 잠의 slow-wave 델타파(δ)로 변화합니다. REM 수면은 몸은 마비 상태이나 뇌파는 깨어있음과 유사한 주파수를 보입니다. 본 웹앱은 이 주파수 특성을 신호 처리하여 수면 단계를 분류합니다.
-        </p>
-      </div>
 
-      <!-- 사용자 정보 입력 파트 -->
-      <div class="card">
-        <h3>👤 사용자 프로필 및 조건</h3>
-        <form id="eegForm" onsubmit="runAnalysis(event)">
-          <div class="form-group">
-            <label for="age">나이 (세)</label>
-            <input type="number" id="age" value="18" min="10" max="100" required>
-          </div>
-          <div class="form-group">
-            <label for="sleepTime">평소 취침 - 기상 시간</label>
-            <input type="text" id="sleepTime" value="01:30 - 07:30" required>
-          </div>
-          <div class="form-group">
-            <label for="symptom">주요 수면 불편 유형</label>
-            <select id="symptom">
-              <option value="fatigue">주간 피로감 및 뇌 안개(Brain Fog)</option>
-              <option value="latency">잠들기까지 오랜 시간이 걸림 (입면 장애)</option>
-              <option value="awakening">수면 중 자주 깸 (수면 유지 장애)</option>
-              <option value="irregular">불규칙한 수면 주기 (학생 특화)</option>
-            </select>
-          </div>
+        <h2>오늘의 수면 기록</h2>
 
-          <div class="form-group">
-            <label>EEG 데이터 업로드 (채널: Fpz-Cz / Pz-Oz)</label>
-            <div class="file-upload-wrapper" onclick="document.getElementById('eegFile').click()">
-              <span id="fileLabel" style="font-size: 0.85rem; color: var(--text-muted);">
-                📁 Sleep-EDF 형식 데이터(.edf/.csv)를 업로드하거나 샘플을 클릭하세요
-              </span>
-              <input type="file" id="eegFile" style="display: none;" onchange="updateFileName(this)">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <label>평균 수면 시간</label>
+                <div class="value" id="avgSleep">0시간</div>
             </div>
-            <div class="data-source-tag">
-              데이터 출처: PhysioNet Sleep-EDF Database | AASM 임상 매뉴얼 적용
+            <div class="stat-card">
+                <label>평균 수면 점수</label>
+                <div class="value" id="avgScore">0점</div>
             </div>
-          </div>
+        </div>
 
-          <button type="submit" class="btn">EEG 시계열 분석 시작</button>
-        </form>
-      </div>
+        <div class="record-card">
+            <label>수면 데이터 입력</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="number" id="sleepHours" placeholder="수면 시간 (시간)" min="1" max="24" style="flex: 1;">
+                <button id="addLogBtn" style="width: 80px;">기록</button>
+            </div>
+        </div>
+
+        <label style="margin-top: 8px;">최근 수면 기록 목록</label>
+        <div class="log-list" id="logList">
+            <!-- 수면 기록이 추가되는 영역 -->
+        </div>
     </div>
+</div>
 
-    <!-- 우측 메인 대시보드: 수면 리포트 및 결과 -->
-    <div class="main-content">
-      
-      <!-- 상단 요약 지표 -->
-      <div class="metric-grid">
-        <div class="metric-card">
-          <div class="label">총 수면 시간</div>
-          <div class="value" id="valTotalSleep">6.5 h</div>
-        </div>
-        <div class="metric-card">
-          <div class="label">REM 수면 비율</div>
-          <div class="value" id="valRemRatio">12.3%</div>
-        </div>
-        <div class="metric-card">
-          <div class="label">깊은 수면(N3)</div>
-          <div class="value" id="valDeepRatio">14.1%</div>
-        </div>
-        <div class="metric-card">
-          <div class="label">각성 횟수(WASO)</div>
-          <div class="value" id="valAwakenings" style="color: var(--warning-red);">7 회</div>
-        </div>
-      </div>
+<script>
+    // 상태 관리 (로컬스토리지 연동)
+    let users = JSON.parse(localStorage.getItem('sleep_app_users')) || {};
+    let currentUser = null;
+    let isLoginMode = false;
 
-      <!-- 수면 구조도 (Hypnogram) 그래프 -->
-      <div class="card">
-        <h3>📊 수면 구조도 (Hypnogram) — 30초 Epoch 시계열 분류</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
-          PhysioNet Sleep-EDF 정답 라벨과 매핑하여 시간 흐름에 따른 수면 단계를 보여줍니다.
-        </p>
-        <div class="chart-container">
-          <canvas id="hypnogramChart"></canvas>
-        </div>
-      </div>
+    // DOM 요소
+    const authScreen = document.getElementById('authScreen');
+    const dashboardScreen = document.getElementById('dashboardScreen');
+    const authTitle = document.getElementById('authTitle');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const authPrimaryBtn = document.getElementById('authPrimaryBtn');
+    const authToggleBtn = document.getElementById('authToggleBtn');
+    const authMessage = document.getElementById('authMessage');
 
-      <!-- 주파수 대역 분석 & 단계별 비율 -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <div class="card">
-          <h3>⚡ 뇌파 주파수 대역 (EEG Frequency)</h3>
-          <div class="chart-container" style="height: 200px;">
-            <canvas id="frequencyChart"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <h3>🍰 수면 단계별 비율 (%)</h3>
-          <div class="chart-container" style="height: 200px;">
-            <canvas id="ratioChart"></canvas>
-          </div>
-        </div>
-      </div>
+    const currentUserSpan = document.getElementById('currentUser');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sleepHoursInput = document.getElementById('sleepHours');
+    const addLogBtn = document.getElementById('addLogBtn');
+    const logList = document.getElementById('logList');
+    const avgSleepDiv = document.getElementById('avgSleep');
+    const avgScoreDiv = document.getElementById('avgScore');
 
-      <!-- 이상 패턴 탐지 및 임상 안내 -->
-      <div class="card">
-        <h3>🚨 이상 패턴 탐지 결과 (Anomaly Detection)</h3>
-        <div id="anomalyAlert" class="alert alert-warning">
-          <strong>[이상 패턴 발견] REM 수면 결핍 및 야간 각성 빈도 증가</strong><br>
-          AASM 연령별 표준 기준치(REM 20~25%) 대비 현재 REM 비율(12.3%)이 현저히 낮습니다. 또한 30초 Epoch 분석 결과, 수면 중 불규칙한 미세 각성이 7회 감지되었습니다. 이는 수면 무호흡증 또는 심한 스트레스성 입면 장애의 조기 징후일 수 있습니다.
-        </div>
-        <p style="font-size: 0.75rem; color: var(--text-muted);">
-          * 본 시스템은 조기 발견 및 수면 조정을 돕는 스크리닝 도구이며, 확정 진단을 제공하지 않습니다. 증상이 지속될 경우 수면 전문의(수면다원검사) 진료를 권장합니다.
-        </p>
-      </div>
-
-      <!-- 개인 맞춤형 수면 조정 솔루션 & 개선 추이 -->
-      <div class="card">
-        <h3>🎯 개인 맞춤 수면 조정 제안 & 개선 추이</h3>
-        <ul class="rec-list" id="recommendationList">
-          <li><strong>취침 시간 조정:</strong> 학생 권장 수면 주기를 위해 취침 시간을 현재 오전 1:30에서 12:30으로 1시간 앞당기세요.</li>
-          <li><strong>카페인 및 빛 제어:</strong> 수면 시작 6시간 전 카페인 섭취를 제한하고 델타파 유도를 위해 취침 1시간 전 블루라이트를 차단하세요.</li>
-          <li><strong>REM 수면 유도 규칙:</strong> 90분 수면 주기 반복에 맞춘 수면 스케줄링으로 REM 수면 비율을 20% 이상으로 끌어올립니다.</li>
-        </ul>
-
-        <h4 style="margin-top: 20px; font-size: 0.95rem; margin-bottom: 10px;">📈 주차별 수면 효율 개선 추이</h4>
-        <div class="chart-container" style="height: 180px;">
-          <canvas id="trendChart"></canvas>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    // 변수 선언
-    let hypnogramChart, frequencyChart, ratioChart, trendChart;
-
-    // 인증 모달 로직
-    function handleAuth(e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
-      if(username) {
-        document.getElementById('userDisplay').innerText = username;
-        document.getElementById('authOverlay').style.display = 'none';
-        initCharts();
-      }
+    // 유효성 검사
+    function validateEmail(email) {
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
 
-    function updateFileName(input) {
-      if(input.files && input.files[0]) {
-        document.getElementById('fileLabel').innerText = `📄 업로드됨: ${input.files[0].name}`;
-      }
+    function validatePassword(pw) {
+        return pw.length >= 8 && /[A-Za-z]/.test(pw) && /\d/.test(pw);
     }
 
-    // Chart.js 그래프 초기화
-    function initCharts() {
-      // 1. Hypnogram (수면 구조도)
-      const ctxHypno = document.getElementById('hypnogramChart').getContext('2d');
-      const timeLabels = Array.from({length: 40}, (_, i) => {
-        const mins = i * 10;
-        const hrs = Math.floor(mins / 60);
-        const m = mins % 60;
-        return `${hrs}h ${m}m`;
-      });
+    function showAuthMessage(text, isSuccess) {
+        authMessage.textContent = text;
+        authMessage.className = 'message-box ' + (isSuccess ? 'success' : 'error');
+    }
 
-      // Stage map: 4: Wake, 3: REM, 2: N1/N2 (Light), 1: N3 (Deep)
-      const hypnoData = [4, 4, 2, 2, 1, 1, 1, 2, 3, 3, 2, 2, 4, 2, 1, 1, 2, 3, 3, 2, 4, 2, 2, 1, 2, 3, 2, 2, 4, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4];
+    // 회원가입/로그인 토글
+    authToggleBtn.addEventListener('click', () => {
+        isLoginMode = !isLoginMode;
+        authTitle.textContent = isLoginMode ? 'SleepWell 로그인' : 'SleepWell 회원가입';
+        authPrimaryBtn.textContent = isLoginMode ? '로그인' : '가입하기';
+        authToggleBtn.textContent = isLoginMode ? '회원가입 화면으로 이동' : '로그인 화면으로 이동';
+        authMessage.className = 'message-box';
+    });
 
-      hypnogramChart = new Chart(ctxHypno, {
-        type: 'line',
-        data: {
-          labels: timeLabels,
-          datasets: [{
-            label: '수면 단계 (30초 Epoch 기반)',
-            data: hypnoData,
-            borderColor: '#8b5cf6',
-            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-            stepped: true,
-            fill: true,
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              min: 0.5,
-              max: 4.5,
-              ticks: {
-                stepSize: 1,
-                callback: function(value) {
-                  const stages = {1: 'N3 (깊은잠)', 2: 'N1/N2 (얕은잠)', 3: 'REM 수면', 4: '각성 (Wake)'};
-                  return stages[value] || '';
-                },
-                color: '#94a3b8'
-              },
-              grid: { color: '#334155' }
-            },
-            x: {
-              ticks: { color: '#94a3b8' },
-              grid: { color: '#334155' }
+    // 회원가입 및 로그인 처리
+    authPrimaryBtn.addEventListener('click', () => {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!validateEmail(email)) {
+            showAuthMessage('올바른 이메일 형식을 입력하세요.', false);
+            return;
+        }
+
+        if (!isLoginMode) {
+            // 회원가입
+            if (!validatePassword(password)) {
+                showAuthMessage('비밀번호는 8자 이상, 영문과 숫자를 포함해야 합니다.', false);
+                return;
             }
-          },
-          plugins: {
-            legend: { labels: { color: '#f8fafc' } }
-          }
-        }
-      });
-
-      // 2. Frequency Bands Chart
-      const ctxFreq = document.getElementById('frequencyChart').getContext('2d');
-      frequencyChart = new Chart(ctxFreq, {
-        type: 'bar',
-        data: {
-          labels: ['델타 (δ)', '세타 (θ)', '알파 (α)', '베타 (β)'],
-          datasets: [{
-            label: '파워 스펙트럼 밀도 (%)',
-            data: [45, 25, 15, 15],
-            backgroundColor: ['#3b82f6', '#06b6d4', '#8b5cf6', '#ec4899']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
-          },
-          plugins: { legend: { display: false } }
-        }
-      });
-
-      // 3. Sleep Ratio Donut Chart
-      const ctxRatio = document.getElementById('ratioChart').getContext('2d');
-      ratioChart = new Chart(ctxRatio, {
-        type: 'doughnut',
-        data: {
-          labels: ['얕은잠 (N1/N2)', '깊은잠 (N3)', 'REM 수면', '각성'],
-          datasets: [{
-            data: [55.6, 14.1, 12.3, 18.0],
-            backgroundColor: ['#06b6d4', '#3b82f6', '#8b5cf6', '#ef4444']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'right', labels: { color: '#f8fafc', font: { size: 10 } } }
-          }
-        }
-      });
-
-      // 4. Trend Chart
-      const ctxTrend = document.getElementById('trendChart').getContext('2d');
-      trendChart = new Chart(ctxTrend, {
-        type: 'line',
-        data: {
-          labels: ['1주차 (분석전)', '2주차 (조정 시작)', '3주차', '4주차 (목표치)'],
-          datasets: [
-            {
-              label: 'REM 수면 비율 (%)',
-              data: [12.3, 15.0, 18.2, 22.0],
-              borderColor: '#8b5cf6',
-              tension: 0.3
-            },
-            {
-              label: '야간 각성 횟수 (회)',
-              data: [7, 5, 3, 1],
-              borderColor: '#ef4444',
-              tension: 0.3
+            if (users[email]) {
+                showAuthMessage('이미 존재하는 계정입니다.', false);
+                return;
             }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
-          },
-          plugins: { legend: { labels: { color: '#f8fafc' } } }
+
+            users[email] = { password: password, logs: [] };
+            localStorage.setItem('sleep_app_users', JSON.stringify(users));
+            showAuthMessage('가입 완료! 로그인해주세요.', true);
+            authToggleBtn.click();
+        } else {
+            // 로그인
+            if (!users[email] || users[email].password !== password) {
+                showAuthMessage('이메일 또는 비밀번호가 올바르지 않습니다.', false);
+                return;
+            }
+
+            currentUser = email;
+            loadDashboard();
         }
-      });
+    });
+
+    // 대시보드 로드
+    function loadDashboard() {
+        authScreen.classList.add('hidden');
+        dashboardScreen.classList.remove('hidden');
+        currentUserSpan.textContent = currentUser;
+        renderLogs();
     }
 
-    // 분석 실행 및 데이터 갱신 로직
-    function runAnalysis(e) {
-      e.preventDefault();
+    // 로그아웃
+    logoutBtn.addEventListener('click', () => {
+        currentUser = null;
+        dashboardScreen.classList.add('hidden');
+        authScreen.classList.remove('hidden');
+        emailInput.value = '';
+        passwordInput.value = '';
+    });
 
-      const symptom = document.getElementById('symptom').value;
-      const age = document.getElementById('age').value;
+    // 수면 기록 추가
+    addLogBtn.addEventListener('click', () => {
+        const hours = parseFloat(sleepHoursInput.value);
+        if (isNaN(hours) || hours <= 0 || hours > 24) {
+            alert('올바른 수면 시간을 입력해 주세요 (1~24시간).');
+            return;
+        }
 
-      // 시뮬레이션 데이터 동적 재계산
-      let remRatio = 12.3;
-      let deepRatio = 14.1;
-      let awakenings = 7;
-      let alertMsg = "";
-      let recs = [];
+        // 수면 점수 계산 로직 (7~8시간 기준 100점)
+        let score = Math.max(0, 100 - Math.abs(7.5 - hours) * 15);
+        score = Math.round(score);
 
-      if(symptom === 'fatigue') {
-        remRatio = 11.5;
-        deepRatio = 9.8;
-        awakenings = 8;
-        alertMsg = "<strong>[이상 패턴] 만성 피로 및 깊은 수면(N3) 부족</strong><br>AASM 임상치 기준 깊은 수면 비율이 정상 범위(15~20%)보다 낮아 뇌 휴식이 원활하지 않습니다. 서파 수면(Delta wave)을 저해하는 요인이 있습니다.";
-        recs = [
-          "<strong>서파 수면 강화:</strong> 취침 전 고강도 운동을 피하고 38~40도의 온수로 족욕을 시행하여 체온 저하를 유도하세요.",
-          "<strong>일주기 리듬 재설정:</strong> 아침 기상 직후 15분간 햇빛을 받아 멜라토닌 분비 타이밍을 동기화하세요."
-        ];
-      } else if(symptom === 'latency') {
-        remRatio = 14.0;
-        deepRatio = 16.0;
-        awakenings = 4;
-        alertMsg = "<strong>[이상 패턴] 입면 지연 (Beta 파 잔류 현상)</strong><br>취침 시작 후 첫 N1/N2 수면으로의 진입 시점까지 고주파 베타파(β)가 지속 감지되어 뇌가 지속적인 각성 상태에 머물러 있습니다.";
-        recs = [
-          "<strong>인지행동 치료법(CBT-I) 적용:</strong> 잠자리에 든 후 20분 동안 잠에 들지 못하면 침대에서 나와 자극이 적은 활동을 하세요.",
-          "<strong>수면 전 뇌파 안정:</strong> 4-7-8 호흡법 및 자율 훈련법을 통해 알파파(α) 발생을 유도하세요."
-        ];
-      } else {
-        alertMsg = "<strong>[이상 패턴] 수면 분절 및 잦은 야간 각성</strong><br>30초 Epoch 시계열 분석 결과, REM 및 깊은 수면 도중 불규칙한 각성 파동이 관찰됩니다. 수면 무호흡증 조기 탐지 기준에 해당할 수 있습니다.";
-        recs = [
-          "<strong>수석자세 개선:</strong> 측면 수면(옆으로 눕기)을 통해 기도 수축 및 수면 무호흡 가능성을 감소시키세요.",
-          "<strong>전문의 권장:</strong> 증상이 지속될 경우 의료기관 방문 및 수면다원검사(PSG)를 권장합니다."
-        ];
-      }
+        const today = new Date().toISOString().split('T')[0];
 
-      // UI 및 차트 업데이트
-      document.getElementById('valRemRatio').innerText = remRatio + "%";
-      document.getElementById('valDeepRatio').innerText = deepRatio + "%";
-      document.getElementById('valAwakenings').innerText = awakenings + " 회";
-      document.getElementById('anomalyAlert').innerHTML = alertMsg;
+        users[currentUser].logs.unshift({ date: today, hours: hours, score: score });
+        localStorage.setItem('sleep_app_users', JSON.stringify(users));
 
-      const recContainer = document.getElementById('recommendationList');
-      recContainer.innerHTML = recs.map(r => `<li>${r}</li>`).join('');
+        sleepHoursInput.value = '';
+        renderLogs();
+    });
 
-      // Update charts with slight random variations
-      frequencyChart.data.datasets[0].data = [deepRatio * 3, 25, 15, 100 - (deepRatio * 3 + 40)];
-      frequencyChart.update();
+    // 통계 및 기록 UI 렌더링
+    function renderLogs() {
+        const logs = users[currentUser].logs;
+        logList.innerHTML = '';
 
-      ratioChart.data.datasets[0].data = [60 - remRatio, deepRatio, remRatio, awakenings * 2];
-      ratioChart.update();
+        if (logs.length === 0) {
+            logList.innerHTML = '<div class="log-item" style="justify-content:center; color:#64748b;">기록된 수면 데이터가 없습니다.</div>';
+            avgSleepDiv.textContent = '0시간';
+            avgScoreDiv.textContent = '0점';
+            return;
+        }
 
-      alert("EEG 데이터 분석 및 30초 Epoch 라벨 분류가 완료되었습니다.");
+        let totalHours = 0;
+        let totalScore = 0;
+
+        logs.forEach(log => {
+            totalHours += log.hours;
+            totalScore += log.score;
+
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            item.innerHTML = `<span>${log.date}</span><span><b>${log.hours}시간</b> (${log.score}점)</span>`;
+            logList.appendChild(item);
+        });
+
+        avgSleepDiv.textContent = (totalHours / logs.length).toFixed(1) + '시간';
+        avgScoreDiv.textContent = Math.round(totalScore / logs.length) + '점';
     }
-  </script>
+</script>
+
 </body>
 </html>
