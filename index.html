@@ -4,43 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SleepBio | Personalized EEG Sleep Analysis</title>
+<title>SleepBio — EEG Sleep Intelligence</title>
 
 <style>
 
 /* =========================================================
-   SLEEPBIO
-   Personalized EEG Sleep Analysis
+   GLOBAL
 ========================================================= */
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-:root {
-    --bg: #070a12;
-    --bg2: #0b0f1b;
-    --card: #111625;
-    --card2: #161c2d;
+:root{
+    --bg:#060812;
+    --bg2:#0b0e1b;
+    --card:#101426;
+    --card2:#151a2d;
 
-    --text: #f5f6ff;
-    --muted: #858da5;
+    --text:#f7f7ff;
+    --muted:#8991aa;
 
-    --purple: #8b7cff;
-    --purple2: #a89cff;
+    --purple:#8d7cff;
+    --purple2:#b0a5ff;
 
-    --blue: #5f9dff;
-    --cyan: #63d8e7;
-    --green: #70d7a0;
-    --orange: #ffb86b;
-    --red: #ff7373;
+    --blue:#609cff;
+    --cyan:#6cdce9;
 
-    --border: rgba(255,255,255,0.07);
+    --green:#72d6a0;
+    --orange:#ffb86b;
+    --red:#ff7070;
+
+    --border:rgba(255,255,255,.07);
 }
 
-body {
+body{
     font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -50,806 +50,1554 @@ body {
 
     background:
         radial-gradient(
-            circle at 80% 0%,
-            rgba(107,88,255,0.13),
+            circle at 70% -10%,
+            rgba(117,95,255,.20),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(66,120,255,.07),
             transparent 30%
         ),
         var(--bg);
 
-    color: var(--text);
-    min-height: 100vh;
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
 }
+
+
+/* =========================================================
+   BACKGROUND ANIMATION
+========================================================= */
+
+.background-orb{
+    position:fixed;
+
+    width:420px;
+    height:420px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,124,255,.09),
+            transparent 70%
+        );
+
+    filter:blur(10px);
+
+    pointer-events:none;
+
+    animation:
+        floatingOrb 12s ease-in-out infinite;
+}
+
+.orb1{
+    top:-180px;
+    right:-100px;
+}
+
+.orb2{
+    bottom:-220px;
+    left:-120px;
+
+    animation-delay:-6s;
+}
+
+@keyframes floatingOrb{
+
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+
+    50%{
+        transform:translate(30px,20px) scale(1.08);
+    }
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(112,93,255,.15),
+            transparent 40%
+        ),
+        #050711;
+
+    transition:.5s;
+}
+
+.login-container{
+
+    width:min(430px,90%);
+
+    animation:
+        loginAppear .8s ease;
+}
+
+@keyframes loginAppear{
+
+    from{
+        opacity:0;
+        transform:translateY(25px) scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.login-logo{
+
+    text-align:center;
+
+    font-size:40px;
+
+    font-weight:900;
+
+    letter-spacing:-2px;
+}
+
+.login-logo span{
+    color:var(--purple);
+}
+
+.login-subtitle{
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-top:8px;
+
+    margin-bottom:30px;
+}
+
+.login-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,25,43,.95),
+            rgba(10,13,24,.98)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:28px;
+
+    padding:30px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.35);
+}
+
+.login-card h2{
+
+    text-align:center;
+
+    font-size:20px;
+
+    margin-bottom:8px;
+}
+
+.login-card p{
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-bottom:23px;
+}
+
+.login-input{
+
+    width:100%;
+
+    padding:14px 15px;
+
+    margin-bottom:10px;
+
+    background:var(--card2);
+
+    border:1px solid var(--border);
+
+    color:white;
+
+    border-radius:12px;
+
+    outline:none;
+}
+
+.login-input:focus{
+
+    border-color:
+        rgba(141,124,255,.6);
+}
+
+.login-main{
+
+    width:100%;
+
+    border:0;
+
+    background:var(--purple);
+
+    color:white;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    margin-top:5px;
+
+    cursor:pointer;
+}
+
+.divider{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:22px 0;
+
+    color:#5f667b;
+
+    font-size:10px;
+}
+
+.divider::before,
+.divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:var(--border);
+}
+
+.social-login{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:9px;
+}
+
+.social{
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    background:var(--card2);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+    transition:.2s;
+}
+
+.social:hover{
+
+    transform:translateY(-2px);
+
+    background:#1c2238;
+}
+
+.kakao{
+    color:#ffe812;
+}
+
+.naver{
+    color:#65d96c;
+}
+
+.google{
+    color:#fff;
+}
+
+.apple{
+    color:#fff;
+}
+
+.login-note{
+
+    margin-top:18px;
+
+    text-align:center;
+
+    color:#697187;
+
+    font-size:9px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+    display:flex;
+
+    min-height:100vh;
+
+    opacity:0;
+
+    transition:opacity .6s;
+}
+
+.app.visible{
+    opacity:1;
+}
+
 
 /* =========================================================
    SIDEBAR
 ========================================================= */
 
-.app {
-    display: flex;
-    min-height: 100vh;
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:245px;
+    height:100vh;
+
+    padding:28px 17px;
+
+    background:
+        rgba(6,8,18,.92);
+
+    backdrop-filter:blur(18px);
+
+    border-right:1px solid var(--border);
+
+    z-index:20;
 }
 
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
+.logo{
 
-    width: 245px;
-    height: 100vh;
+    font-size:25px;
 
-    padding: 30px 18px;
+    font-weight:900;
 
-    background: rgba(7,10,18,0.96);
+    letter-spacing:-1px;
 
-    border-right: 1px solid var(--border);
-
-    z-index: 20;
+    margin-bottom:5px;
 }
 
-.logo {
-    font-size: 25px;
-    font-weight: 800;
-
-    margin-bottom: 42px;
-
-    letter-spacing: -1px;
+.logo span{
+    color:var(--purple);
 }
 
-.logo span {
-    color: var(--purple);
+.logo-sub{
+
+    font-size:8px;
+
+    color:#687087;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:40px;
 }
 
-.logo-sub {
-    font-size: 9px;
-    color: var(--muted);
+.menu{
 
-    margin-top: 5px;
+    display:flex;
 
-    letter-spacing: 1px;
+    flex-direction:column;
+
+    gap:5px;
 }
 
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+.menu button{
+
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--muted);
+
+    padding:13px 14px;
+
+    border-radius:13px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    transition:.2s;
 }
 
-.menu button {
-    width: 100%;
+.menu button:hover{
 
-    border: none;
-    background: transparent;
+    background:var(--card2);
 
-    color: var(--muted);
+    color:white;
 
-    padding: 14px 15px;
-
-    border-radius: 13px;
-
-    text-align: left;
-
-    font-size: 13px;
-
-    transition: 0.2s;
+    transform:translateX(2px);
 }
 
-.menu button:hover {
-    background: var(--card2);
-    color: white;
-}
+.menu button.active{
 
-.menu button.active {
     background:
         linear-gradient(
             90deg,
-            rgba(139,124,255,0.22),
-            rgba(139,124,255,0.05)
+            rgba(141,124,255,.22),
+            rgba(141,124,255,.04)
         );
 
-    color: white;
+    color:white;
 }
 
-.bottom-info {
-    position: absolute;
-    bottom: 25px;
-    left: 18px;
-    right: 18px;
+.user-mini{
 
-    padding: 13px;
+    position:absolute;
 
-    background: var(--card);
+    left:17px;
+    right:17px;
+    bottom:20px;
 
-    border: 1px solid var(--border);
+    padding:13px;
 
-    border-radius: 13px;
+    background:var(--card);
 
-    font-size: 10px;
-    color: var(--muted);
+    border:1px solid var(--border);
 
-    line-height: 1.6;
+    border-radius:14px;
 }
+
+.avatar{
+
+    width:30px;
+    height:30px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            #4f65d9
+        );
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+.user-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+}
+
+.user-name{
+
+    font-size:10px;
+
+    font-weight:bold;
+}
+
+.user-email{
+
+    font-size:8px;
+
+    color:var(--muted);
+
+    margin-top:3px;
+}
+
 
 /* =========================================================
    MAIN
 ========================================================= */
 
-.main {
-    margin-left: 245px;
+.main{
 
-    width: calc(100% - 245px);
+    margin-left:245px;
 
-    max-width: 1500px;
+    width:
+        calc(100% - 245px);
 
-    padding: 38px 45px 70px;
+    max-width:1500px;
+
+    padding:38px 45px 70px;
 }
 
-.page {
-    animation: fadeIn 0.25s ease;
+.page{
+
+    animation:
+        pageIn .35s ease;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
+@keyframes pageIn{
+
+    from{
+        opacity:0;
+        transform:translateY(8px);
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    to{
+        opacity:1;
+        transform:none;
     }
 }
+
 
 /* =========================================================
    HEADER
 ========================================================= */
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.header{
 
-    margin-bottom: 28px;
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:27px;
 }
 
-.header h1 {
-    font-size: 29px;
+.header h1{
 
-    letter-spacing: -1px;
+    font-size:28px;
+
+    letter-spacing:-1.2px;
 }
 
-.header p {
-    color: var(--muted);
+.header p{
 
-    font-size: 13px;
+    color:var(--muted);
 
-    margin-top: 7px;
+    font-size:12px;
+
+    margin-top:6px;
 }
 
-.status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.status{
 
-    background: var(--card);
+    padding:9px 13px;
 
-    border: 1px solid var(--border);
+    background:var(--card);
 
-    padding: 10px 14px;
+    border:1px solid var(--border);
 
-    border-radius: 20px;
+    border-radius:20px;
 
-    color: var(--muted);
+    color:var(--muted);
 
-    font-size: 11px;
+    font-size:10px;
 }
 
-.status-dot {
-    width: 7px;
-    height: 7px;
+.status-dot{
 
-    border-radius: 50%;
+    display:inline-block;
 
-    background: var(--green);
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:var(--green);
 
     box-shadow:
-        0 0 10px rgba(112,215,160,0.8);
+        0 0 10px var(--green);
+
+    margin-right:6px;
 }
+
 
 /* =========================================================
-   CARD
+   CARDS
 ========================================================= */
 
-.grid {
-    display: grid;
-    gap: 17px;
-}
+.card{
 
-.grid-2 {
-    grid-template-columns: repeat(2,1fr);
-}
-
-.grid-4 {
-    grid-template-columns: repeat(4,1fr);
-}
-
-.card {
     background:
         linear-gradient(
             145deg,
-            rgba(20,26,42,0.95),
-            rgba(12,16,27,0.95)
+            rgba(19,24,41,.96),
+            rgba(10,13,24,.96)
         );
 
-    border:
-        1px solid var(--border);
+    border:1px solid var(--border);
 
-    border-radius: 22px;
+    border-radius:21px;
 
-    padding: 23px;
+    padding:22px;
+
+    transition:
+        transform .25s,
+        border-color .25s;
 }
 
-.card-title {
-    color: var(--muted);
+.card:hover{
 
-    font-size: 10px;
-
-    letter-spacing: 1px;
-
-    margin-bottom: 13px;
+    border-color:
+        rgba(141,124,255,.14);
 }
 
-.big-number {
-    font-size: 30px;
-    font-weight: 750;
+.grid{
+
+    display:grid;
+
+    gap:16px;
 }
 
-.small {
-    color: var(--muted);
-
-    font-size: 11px;
-
-    margin-top: 7px;
-
-    line-height: 1.6;
+.grid4{
+    grid-template-columns:
+        repeat(4,1fr);
 }
 
-.section {
-    margin-top: 18px;
+.grid2{
+    grid-template-columns:
+        repeat(2,1fr);
 }
 
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.section{
 
-    margin-bottom: 15px;
+    margin-top:17px;
 }
 
-.section-header h2 {
-    font-size: 17px;
+.card-title{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    letter-spacing:1.2px;
+
+    margin-bottom:11px;
 }
+
+.big{
+
+    font-size:30px;
+
+    font-weight:800;
+}
+
+.small{
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    line-height:1.65;
+
+    margin-top:6px;
+}
+
 
 /* =========================================================
    SLEEP SCORE
 ========================================================= */
 
-.score-card {
-    min-height: 210px;
+.score-card{
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    min-height:190px;
 }
 
-.score-ring {
-    width: 150px;
-    height: 150px;
+.score-ring{
 
-    border-radius: 50%;
+    width:135px;
+    height:135px;
+
+    border-radius:50%;
 
     background:
         conic-gradient(
-            var(--purple) 0deg 302deg,
-            #282e40 302deg 360deg
+            var(--purple) 0 302deg,
+            #252b3c 302deg 360deg
         );
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
 
-    box-shadow:
-        0 0 35px rgba(139,124,255,0.12);
+    justify-content:center;
+    align-items:center;
+
+    animation:
+        breathing 4s ease-in-out infinite;
 }
 
-.score-inner {
-    width: 120px;
-    height: 120px;
+@keyframes breathing{
 
-    border-radius: 50%;
+    0%,100%{
+        box-shadow:0 0 20px rgba(141,124,255,.06);
+    }
 
-    background: var(--card);
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
+    50%{
+        box-shadow:0 0 45px rgba(141,124,255,.20);
+    }
 }
 
-.score {
-    font-size: 37px;
-    font-weight: 800;
+.score-inner{
+
+    width:108px;
+    height:108px;
+
+    border-radius:50%;
+
+    background:#101426;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
 }
 
-.score-label {
-    font-size: 9px;
-    color: var(--muted);
+.score-number{
 
-    margin-top: 2px;
+    font-size:34px;
+
+    font-weight:900;
 }
+
+.score-label{
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    margin-top:3px;
+}
+
 
 /* =========================================================
-   SLEEP ARCHITECTURE
+   TIMELINE
 ========================================================= */
 
-.timeline {
-    height: 65px;
+.timeline{
 
-    display: flex;
+    height:58px;
 
-    overflow: hidden;
+    display:flex;
 
-    border-radius: 13px;
+    border-radius:11px;
 
-    background: #202638;
+    overflow:hidden;
+
+    background:#242a3d;
 }
 
-.stage {
-    height: 100%;
+.stage{
 
-    transition: 0.25s;
+    height:100%;
+
+    transition:.25s;
 }
 
-.stage:hover {
-    filter: brightness(1.35);
+.stage:hover{
+
+    filter:brightness(1.3);
 }
 
-.awake {
-    background: var(--orange);
+.awake{
+    background:var(--orange);
 }
 
-.rem {
-    background: var(--purple);
+.light{
+    background:var(--blue);
 }
 
-.light {
-    background: var(--blue);
+.deep{
+    background:#3e60d5;
 }
 
-.deep {
-    background: #355bd4;
+.rem{
+    background:var(--purple);
 }
 
-.timeline-labels {
-    display: flex;
+.legend{
 
-    justify-content: space-between;
+    display:flex;
 
-    margin-top: 8px;
+    gap:15px;
 
-    color: var(--muted);
+    margin-top:12px;
 
-    font-size: 9px;
+    color:var(--muted);
+
+    font-size:9px;
 }
 
-.legend {
-    display: flex;
+.legend-dot{
 
-    gap: 17px;
+    display:inline-block;
 
-    flex-wrap: wrap;
+    width:7px;
+    height:7px;
 
-    margin-top: 15px;
+    border-radius:2px;
+
+    margin-right:4px;
 }
 
-.legend-item {
-    color: var(--muted);
-
-    font-size: 10px;
-}
-
-.legend-dot {
-    display: inline-block;
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 3px;
-
-    margin-right: 5px;
-}
 
 /* =========================================================
    ALERT
 ========================================================= */
 
-.alert {
-    display: flex;
+.alert{
 
-    gap: 13px;
+    display:flex;
 
-    padding: 16px;
+    gap:12px;
 
-    border-radius: 15px;
+    padding:14px;
+
+    border-radius:13px;
 
     background:
-        rgba(139,124,255,0.07);
+        rgba(141,124,255,.06);
 
     border:
-        1px solid rgba(139,124,255,0.14);
+        1px solid rgba(141,124,255,.11);
 }
 
-.alert.warning {
+.alert.warning{
+
     background:
-        rgba(255,184,107,0.07);
+        rgba(255,184,107,.06);
 
     border-color:
-        rgba(255,184,107,0.16);
+        rgba(255,184,107,.13);
 }
 
-.alert-icon {
-    font-size: 20px;
+.alert-icon{
+
+    font-size:18px;
 }
 
-.alert-title {
-    font-size: 13px;
+.alert-title{
 
-    font-weight: 700;
+    font-size:11px;
+
+    font-weight:700;
 }
 
-.alert-text {
-    margin-top: 5px;
+.alert-text{
 
-    color: var(--muted);
+    color:var(--muted);
 
-    font-size: 11px;
+    font-size:9px;
 
-    line-height: 1.65;
+    line-height:1.65;
+
+    margin-top:4px;
 }
+
 
 /* =========================================================
    BUTTON
 ========================================================= */
 
-.primary {
-    border: none;
+.primary{
 
-    background: var(--purple);
+    border:0;
 
-    color: white;
+    background:var(--purple);
 
-    padding: 12px 17px;
+    color:white;
 
-    border-radius: 12px;
+    padding:11px 16px;
 
-    font-weight: 700;
+    border-radius:11px;
 
-    font-size: 12px;
+    cursor:pointer;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    transition:.2s;
 }
 
-.primary:hover {
-    background: var(--purple2);
+.primary:hover{
+
+    transform:translateY(-2px);
+
+    background:var(--purple2);
 }
 
-.secondary {
-    border:
-        1px solid var(--border);
+.secondary{
 
-    background: var(--card2);
+    border:1px solid var(--border);
 
-    color: white;
+    background:var(--card2);
 
-    padding: 11px 15px;
+    color:white;
 
-    border-radius: 12px;
+    padding:10px 14px;
 
-    font-size: 12px;
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:10px;
 }
+
 
 /* =========================================================
-   EEG
+   EEG COLLECTION
 ========================================================= */
 
-canvas {
-    display: block;
+.collection-card{
 
-    width: 100%;
+    position:relative;
 
-    height: 260px;
-
-    background: #090d18;
-
-    border-radius: 15px;
+    overflow:hidden;
 }
 
-.eeg-info {
-    display: grid;
+.collection-hero{
+
+    min-height:240px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:30px;
+}
+
+.collection-copy{
+
+    max-width:560px;
+}
+
+.collection-copy h2{
+
+    font-size:27px;
+
+    line-height:1.2;
+
+    margin-bottom:12px;
+}
+
+.collection-copy p{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    line-height:1.8;
+}
+
+.eeg-device{
+
+    width:220px;
+    height:220px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.eeg-circle{
+
+    position:absolute;
+
+    width:170px;
+    height:170px;
+
+    border-radius:50%;
+
+    border:1px solid
+        rgba(141,124,255,.18);
+
+    animation:
+        pulseCircle 3s ease-in-out infinite;
+}
+
+.eeg-circle:nth-child(2){
+
+    width:125px;
+    height:125px;
+
+    animation-delay:-1s;
+}
+
+.eeg-circle:nth-child(3){
+
+    width:80px;
+    height:80px;
+
+    animation-delay:-2s;
+}
+
+.eeg-core{
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--purple),
+            #5546a8
+        );
+
+    box-shadow:
+        0 0 35px rgba(141,124,255,.7);
+
+    z-index:3;
+}
+
+@keyframes pulseCircle{
+
+    0%,100%{
+        transform:scale(.92);
+        opacity:.4;
+    }
+
+    50%{
+        transform:scale(1.05);
+        opacity:1;
+    }
+}
+
+.connection{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:18px;
+
+    font-size:9px;
+
+    color:var(--muted);
+}
+
+.connection-dot{
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#4b5267;
+}
+
+.connection-dot.connected{
+
+    background:var(--green);
+
+    box-shadow:
+        0 0 10px var(--green);
+}
+
+
+/* =========================================================
+   LIVE EEG
+========================================================= */
+
+.live-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:13px;
+}
+
+.live-status{
+
+    font-size:9px;
+
+    color:var(--muted);
+}
+
+.live-status.active{
+
+    color:var(--green);
+}
+
+.eeg-canvas{
+
+    width:100%;
+
+    height:270px;
+
+    display:block;
+
+    background:#070a14;
+
+    border-radius:14px;
+}
+
+.measure-controls{
+
+    display:flex;
+
+    gap:9px;
+
+    margin-top:13px;
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+
+    display:grid;
 
     grid-template-columns:
         repeat(4,1fr);
 
-    gap: 10px;
+    gap:10px;
+
+    margin-top:15px;
 }
 
-.band {
-    background: var(--card2);
+.metric{
 
-    padding: 14px;
+    padding:14px;
 
-    border-radius: 13px;
+    background:var(--card2);
+
+    border-radius:12px;
 }
 
-.band-name {
-    font-size: 10px;
+.metric-name{
 
-    color: var(--muted);
+    color:var(--muted);
 
-    letter-spacing: 1px;
+    font-size:8px;
 }
 
-.band-value {
-    font-size: 18px;
+.metric-value{
 
-    font-weight: 700;
+    font-size:18px;
 
-    margin-top: 5px;
+    font-weight:700;
+
+    margin-top:5px;
 }
 
-/* =========================================================
-   UPLOAD
-========================================================= */
-
-.upload {
-    border:
-        1px dashed #3b4257;
-
-    border-radius: 17px;
-
-    padding: 30px;
-
-    text-align: center;
-
-    color: var(--muted);
-
-    transition: 0.2s;
-}
-
-.upload:hover {
-    border-color: var(--purple);
-}
-
-.upload strong {
-    display: block;
-
-    color: white;
-
-    font-size: 14px;
-
-    margin-bottom: 7px;
-}
-
-.upload input {
-    margin-top: 15px;
-
-    color: var(--muted);
-}
 
 /* =========================================================
    PROFILE
 ========================================================= */
 
-.profile-grid {
-    display: grid;
+.profile-grid{
+
+    display:grid;
 
     grid-template-columns:
         repeat(2,1fr);
 
-    gap: 11px;
+    gap:10px;
 }
 
-.profile-row {
-    background: var(--card2);
+.profile-row{
 
-    border-radius: 13px;
+    background:var(--card2);
 
-    padding: 14px;
+    border-radius:12px;
+
+    padding:13px;
 }
 
-.profile-header {
-    display: flex;
+.profile-head{
 
-    justify-content: space-between;
+    display:flex;
 
-    font-size: 11px;
+    justify-content:space-between;
+
+    font-size:9px;
 }
 
-.progress {
-    height: 6px;
+.progress{
 
-    background: #292f40;
+    height:5px;
 
-    border-radius: 5px;
+    background:#292f40;
 
-    margin-top: 10px;
+    border-radius:5px;
 
-    overflow: hidden;
+    margin-top:9px;
+
+    overflow:hidden;
 }
 
-.progress-bar {
-    height: 100%;
+.progress-bar{
 
-    background: var(--purple);
+    height:100%;
 
-    border-radius: 5px;
+    width:70%;
+
+    background:var(--purple);
+
+    border-radius:5px;
+
+    animation:
+        progressIn 1.3s ease;
 }
+
+@keyframes progressIn{
+
+    from{
+        width:0;
+    }
+}
+
 
 /* =========================================================
-   SIMULATOR
+   PERSONALIZED
 ========================================================= */
 
-.simulator {
-    display: flex;
+.simulator{
 
-    align-items: center;
+    padding:18px;
 
-    gap: 15px;
+    background:var(--card2);
 
-    flex-wrap: wrap;
+    border-radius:15px;
 }
 
-.slider {
-    width: 250px;
+.slider{
 
-    accent-color: var(--purple);
+    width:100%;
+
+    accent-color:var(--purple);
+
+    margin:18px 0;
 }
 
-.sim-result {
-    margin-top: 20px;
+.sim-score{
 
-    background: var(--card2);
+    font-size:36px;
 
-    padding: 18px;
-
-    border-radius: 15px;
+    font-weight:900;
 }
 
-.sim-arrow {
-    color: var(--green);
+.sim-change{
 
-    font-weight: 700;
+    color:var(--green);
+
+    font-size:10px;
+
+    margin-top:4px;
 }
+
 
 /* =========================================================
-   TABLE
+   HISTORY
 ========================================================= */
 
-.table {
-    width: 100%;
+.history-canvas{
 
-    border-collapse: collapse;
+    width:100%;
 
-    font-size: 11px;
+    height:250px;
+
+    display:block;
 }
 
-.table th {
-    text-align: left;
+.table{
 
-    color: var(--muted);
+    width:100%;
 
-    padding: 13px;
+    border-collapse:collapse;
 
-    border-bottom:
-        1px solid var(--border);
+    font-size:9px;
 }
 
-.table td {
-    padding: 13px;
+.table th{
 
-    border-bottom:
-        1px solid var(--border);
+    text-align:left;
+
+    color:var(--muted);
+
+    padding:12px;
+
+    border-bottom:1px solid var(--border);
 }
 
-.good {
-    color: var(--green);
+.table td{
+
+    padding:12px;
+
+    border-bottom:1px solid var(--border);
 }
 
-.warning-text {
-    color: var(--orange);
+.good{
+    color:var(--green);
 }
+
 
 /* =========================================================
-   BADGE
+   MODAL
 ========================================================= */
 
-.badge {
-    display: inline-block;
+.modal{
 
-    padding: 5px 8px;
+    position:fixed;
 
-    border-radius: 8px;
+    inset:0;
 
-    background:
-        rgba(139,124,255,0.12);
+    background:rgba(0,0,0,.65);
 
-    color: var(--purple2);
+    backdrop-filter:blur(10px);
 
-    font-size: 9px;
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:90;
 }
+
+.modal.show{
+
+    display:flex;
+}
+
+.modal-card{
+
+    width:min(440px,90%);
+
+    background:#111526;
+
+    border:1px solid var(--border);
+
+    border-radius:23px;
+
+    padding:25px;
+
+    animation:
+        modalIn .3s ease;
+}
+
+@keyframes modalIn{
+
+    from{
+        opacity:0;
+        transform:scale(.94);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-card h2{
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.modal-card p{
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    line-height:1.7;
+
+    margin-bottom:18px;
+}
+
+.modal-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+}
+
 
 /* =========================================================
-   HIDDEN
+   TOAST
 ========================================================= */
 
-.hidden {
-    display: none !important;
+.toast{
+
+    position:fixed;
+
+    right:25px;
+
+    bottom:25px;
+
+    padding:13px 17px;
+
+    background:#171c2e;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:10px;
+
+    opacity:0;
+
+    transform:translateY(15px);
+
+    pointer-events:none;
+
+    transition:.3s;
+
+    z-index:200;
 }
+
+.toast.show{
+
+    opacity:1;
+
+    transform:none;
+}
+
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media(max-width:900px) {
+@media(max-width:950px){
 
-    .sidebar {
-        width: 70px;
+    .sidebar{
+
+        width:70px;
 
         padding:
             22px 8px;
     }
 
-    .logo {
-        text-align: center;
+    .logo{
 
-        font-size: 16px;
+        font-size:17px;
+
+        text-align:center;
     }
 
     .logo-sub,
-    .bottom-info {
-        display: none;
+    .user-mini{
+
+        display:none;
     }
 
-    .menu button {
-        font-size: 0;
+    .menu button{
 
-        text-align: center;
+        font-size:0;
+
+        text-align:center;
     }
 
-    .main {
-        margin-left: 70px;
+    .main{
+
+        margin-left:70px;
 
         width:
             calc(100% - 70px);
 
         padding:
-            25px 18px;
+            25px 17px;
     }
 
-    .grid-4,
-    .grid-2,
-    .eeg-info {
-        grid-template-columns: 1fr;
+    .grid4,
+    .grid2,
+    .metrics{
+
+        grid-template-columns:1fr;
     }
 
-    .profile-grid {
-        grid-template-columns: 1fr;
+    .collection-hero{
+
+        flex-direction:column;
+
+        align-items:flex-start;
     }
 
-    .header {
-        align-items: flex-start;
+    .eeg-device{
 
-        gap: 15px;
+        margin:auto;
+    }
 
-        flex-direction: column;
+    .profile-grid{
+
+        grid-template-columns:1fr;
     }
 }
 
@@ -860,25 +1608,140 @@ canvas {
 <body>
 
 
-<!-- =========================================================
-     APPLICATION
-========================================================= -->
-
-<div class="app">
+<div class="background-orb orb1"></div>
+<div class="background-orb orb2"></div>
 
 
 <!-- =========================================================
-     SIDEBAR
+     LOGIN SCREEN
 ========================================================= -->
+
+<div id="loginScreen">
+
+    <div class="login-container">
+
+        <div class="login-logo">
+            Sleep<span>Bio</span>
+        </div>
+
+        <div class="login-subtitle">
+            PERSONALIZED EEG SLEEP INTELLIGENCE
+        </div>
+
+
+        <div class="login-card">
+
+            <h2>
+                나의 수면을 이해해보세요
+            </h2>
+
+            <p>
+                계정에 수면 데이터를 안전하게 연결합니다.
+            </p>
+
+
+            <input
+                id="loginEmail"
+                class="login-input"
+                type="email"
+                placeholder="이메일"
+            >
+
+            <input
+                id="loginPassword"
+                class="login-input"
+                type="password"
+                placeholder="비밀번호"
+            >
+
+
+            <button
+                class="login-main"
+                onclick="loginWithEmail()">
+
+                이메일로 시작하기
+
+            </button>
+
+
+            <div class="divider">
+                또는 간편 로그인
+            </div>
+
+
+            <div class="social-login">
+
+                <button
+                    class="social kakao"
+                    onclick="socialLogin('카카오톡')">
+
+                    🟡 카카오
+
+                </button>
+
+                <button
+                    class="social naver"
+                    onclick="socialLogin('네이버')">
+
+                    🟢 네이버
+
+                </button>
+
+                <button
+                    class="social google"
+                    onclick="socialLogin('Google')">
+
+                    G Google
+
+                </button>
+
+                <button
+                    class="social apple"
+                    onclick="socialLogin('Apple')">
+
+                     Apple
+
+                </button>
+
+            </div>
+
+
+            <div class="login-note">
+
+                로그인하면 EEG 데이터, 수면 기록,
+                개인화 분석 결과가 하나의 계정에 연결됩니다.
+
+                <br>
+
+                현재 프로토타입에서는 로컬 계정 저장 방식으로 동작합니다.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div class="app" id="app">
+
+
+<!-- SIDEBAR -->
 
 <aside class="sidebar">
 
     <div class="logo">
         Sleep<span>Bio</span>
+    </div>
 
-        <div class="logo-sub">
-            PERSONALIZED EEG SLEEP
-        </div>
+    <div class="logo-sub">
+        EEG SLEEP INTELLIGENCE
     </div>
 
 
@@ -886,40 +1749,61 @@ canvas {
 
         <button
             class="active"
-            onclick="showPage('dashboard', this)">
+            onclick="showPage('dashboard',this)">
             🏠 오늘의 수면
         </button>
 
         <button
-            onclick="showPage('eeg', this)">
-            🧠 EEG 분석
+            onclick="showPage('collect',this)">
+            🧠 EEG 데이터 수집
         </button>
 
         <button
-            onclick="showPage('profile', this)">
+            onclick="showPage('analysis',this)">
+            📡 EEG 분석
+        </button>
+
+        <button
+            onclick="showPage('profile',this)">
             🧬 Sleep EEG Profile
         </button>
 
         <button
-            onclick="showPage('personal', this)">
+            onclick="showPage('personal',this)">
             🌙 Personalized Sleep
         </button>
 
         <button
-            onclick="showPage('history', this)">
+            onclick="showPage('history',this)">
             📊 수면 기록
         </button>
 
     </nav>
 
 
-    <div class="bottom-info">
+    <div class="user-mini">
 
-        <b>SleepBio</b><br>
+        <div class="user-row">
 
-        EEG 기반 개인 수면 패턴 분석 프로토타입<br><br>
+            <div class="avatar">
+                S
+            </div>
 
-        ※ 의학적 진단 및 치료를 목적으로 하지 않습니다.
+            <div>
+
+                <div class="user-name">
+                    시윤
+                </div>
+
+                <div
+                    class="user-email"
+                    id="userEmail">
+                    demo@sleepbio.app
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -927,47 +1811,45 @@ canvas {
 
 
 
-<!-- =========================================================
-     MAIN
-========================================================= -->
+<!-- MAIN -->
 
 <main class="main">
 
 
 <!-- =========================================================
-     PAGE 1 — DASHBOARD
+     DASHBOARD
 ========================================================= -->
 
-<section id="dashboard" class="page">
+<section
+    id="dashboard"
+    class="page">
 
     <div class="header">
 
         <div>
 
-            <h1>좋은 아침이에요 👋</h1>
+            <h1>
+                좋은 아침이에요 👋
+            </h1>
 
             <p>
-                오늘의 EEG 기반 수면 패턴을 확인해보세요.
+                오늘 밤의 뇌와 수면을 확인해보세요.
             </p>
 
         </div>
-
 
         <div class="status">
 
             <span class="status-dot"></span>
 
-            EEG 분석 준비됨
+            수면 데이터 동기화됨
 
         </div>
 
     </div>
 
 
-    <!-- SCORE -->
-
-    <div class="grid grid-4">
-
+    <div class="grid grid4">
 
         <div class="card score-card">
 
@@ -975,7 +1857,7 @@ canvas {
 
                 <div class="score-inner">
 
-                    <div class="score">
+                    <div class="score-number">
                         84
                     </div>
 
@@ -996,12 +1878,12 @@ canvas {
                 TOTAL SLEEP
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 7h 42m
             </div>
 
             <div class="small">
-                최근 평균보다 24분 증가했습니다.
+                최근 평균보다 24분 증가
             </div>
 
         </div>
@@ -1013,12 +1895,12 @@ canvas {
                 DEEP SLEEP
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 17%
             </div>
 
             <div class="small">
-                최근 평균 15%
+                최근 7일 평균 15%
             </div>
 
         </div>
@@ -1030,12 +1912,12 @@ canvas {
                 REM
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 21%
             </div>
 
             <div class="small">
-                최근 평균 19%
+                최근 7일 평균 19%
             </div>
 
         </div>
@@ -1043,110 +1925,62 @@ canvas {
     </div>
 
 
-
-    <!-- SLEEP ARCHITECTURE -->
-
     <div class="section card">
 
-        <div class="section-header">
-
-            <h2>
-                Sleep Architecture
-            </h2>
-
-            <span class="small">
-                23:41 — 07:23
-            </span>
-
+        <div class="card-title">
+            SLEEP ARCHITECTURE
         </div>
-
 
         <div class="timeline">
 
-            <div class="stage awake"
-                 style="width:4%"></div>
-
-            <div class="stage light"
-                 style="width:14%"></div>
-
-            <div class="stage deep"
-                 style="width:13%"></div>
-
-            <div class="stage light"
-                 style="width:12%"></div>
-
-            <div class="stage rem"
-                 style="width:8%"></div>
-
-            <div class="stage light"
-                 style="width:11%"></div>
-
-            <div class="stage deep"
-                 style="width:9%"></div>
-
-            <div class="stage light"
-                 style="width:10%"></div>
-
-            <div class="stage rem"
-                 style="width:10%"></div>
-
-            <div class="stage light"
-                 style="width:5%"></div>
-
-            <div class="stage rem"
-                 style="width:4%"></div>
-
-        </div>
-
-
-        <div class="timeline-labels">
-
-            <span>23:40</span>
-            <span>01:00</span>
-            <span>03:00</span>
-            <span>05:00</span>
-            <span>07:20</span>
+            <div class="stage awake" style="width:4%"></div>
+            <div class="stage light" style="width:14%"></div>
+            <div class="stage deep" style="width:13%"></div>
+            <div class="stage light" style="width:12%"></div>
+            <div class="stage rem" style="width:8%"></div>
+            <div class="stage light" style="width:11%"></div>
+            <div class="stage deep" style="width:9%"></div>
+            <div class="stage light" style="width:10%"></div>
+            <div class="stage rem" style="width:10%"></div>
+            <div class="stage light" style="width:5%"></div>
+            <div class="stage rem" style="width:4%"></div>
 
         </div>
 
 
         <div class="legend">
 
-            <div class="legend-item">
-                <span class="legend-dot awake"></span>
+            <span>
+                <i class="legend-dot awake"></i>
                 Awake
-            </div>
+            </span>
 
-            <div class="legend-item">
-                <span class="legend-dot light"></span>
+            <span>
+                <i class="legend-dot light"></i>
                 Light
-            </div>
+            </span>
 
-            <div class="legend-item">
-                <span class="legend-dot deep"></span>
+            <span>
+                <i class="legend-dot deep"></i>
                 Deep
-            </div>
+            </span>
 
-            <div class="legend-item">
-                <span class="legend-dot rem"></span>
+            <span>
+                <i class="legend-dot rem"></i>
                 REM
-            </div>
+            </span>
 
         </div>
 
     </div>
 
 
-
-    <!-- ANALYSIS -->
-
-    <div class="section grid grid-2">
-
+    <div class="section grid grid2">
 
         <div class="card">
 
             <div class="card-title">
-                TODAY'S EEG ANALYSIS
+                EEG INSIGHT
             </div>
 
             <div class="alert">
@@ -1158,12 +1992,12 @@ canvas {
                 <div>
 
                     <div class="alert-title">
-                        안정적인 수면 구조가 관찰되었습니다.
+                        안정적인 수면 구조
                     </div>
 
                     <div class="alert-text">
-                        최근 기록과 비교했을 때 깊은 수면과
-                        REM 수면이 비교적 안정적인 패턴을 보입니다.
+                        최근 기록에서 Deep Sleep과 REM의
+                        비율이 비교적 안정적으로 관찰되었습니다.
                     </div>
 
                 </div>
@@ -1173,28 +2007,27 @@ canvas {
         </div>
 
 
-
         <div class="card">
 
             <div class="card-title">
-                PERSONALIZED TIP
+                TODAY'S RECOMMENDATION
             </div>
 
             <div class="alert warning">
 
                 <div class="alert-icon">
-                    ☕
+                    🌙
                 </div>
 
                 <div>
 
                     <div class="alert-title">
-                        저녁 시간의 카페인 섭취를 확인해보세요.
+                        취침 시간을 일정하게 유지해보세요.
                     </div>
 
                     <div class="alert-text">
-                        생활습관 기록과 EEG 변화를 함께 기록하면
-                        본인에게 나타나는 패턴을 확인할 수 있습니다.
+                        최근 취침 시간의 변동성이
+                        수면 리듬 변화와 함께 나타났습니다.
                     </div>
 
                 </div>
@@ -1206,30 +2039,317 @@ canvas {
     </div>
 
 
+</section>
 
-    <!-- QUICK PROFILE -->
 
-    <div class="section card">
 
-        <div class="section-header">
+<!-- =========================================================
+     EEG COLLECTION
+========================================================= -->
 
-            <h2>
-                My Sleep Phenotype
-            </h2>
+<section
+    id="collect"
+    class="page"
+    style="display:none">
 
-            <span class="badge">
-                7 DAYS DATA
+    <div class="header">
+
+        <div>
+
+            <h1>
+                EEG 데이터 수집
+            </h1>
+
+            <p>
+                직접 측정한 뇌파를 SleepBio에 기록합니다.
+            </p>
+
+        </div>
+
+        <div class="status">
+
+            <span
+                id="deviceDot"
+                class="status-dot"
+                style="background:#555">
+            </span>
+
+            <span id="deviceStatus">
+                장치 연결 안 됨
             </span>
 
         </div>
 
-        <div class="big-number">
-            안정형 수면 패턴
+    </div>
+
+
+    <div class="card collection-card">
+
+        <div class="collection-hero">
+
+            <div class="collection-copy">
+
+                <div class="card-title">
+                    PERSONAL EEG COLLECTION
+                </div>
+
+                <h2>
+                    나의 뇌파를<br>
+                    직접 기록해보세요.
+                </h2>
+
+                <p>
+
+                    EEG 장치에서 측정된 신호를
+                    실시간으로 확인하고 저장합니다.
+
+                    <br><br>
+
+                    저장된 데이터는 이후
+                    수면 단계 분석과 개인 Sleep EEG Profile
+                    생성에 사용할 수 있습니다.
+
+                </p>
+
+
+                <div class="connection">
+
+                    <span
+                        id="connectionDot"
+                        class="connection-dot">
+                    </span>
+
+                    <span id="connectionText">
+                        EEG 장치를 연결해주세요.
+                    </span>
+
+                </div>
+
+
+                <div class="measure-controls">
+
+                    <button
+                        class="primary"
+                        onclick="connectEEG()">
+
+                        EEG 장치 연결
+
+                    </button>
+
+                    <button
+                        class="secondary"
+                        onclick="startDemoEEG()">
+
+                        Demo EEG 사용
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="eeg-device">
+
+                <div class="eeg-circle"></div>
+                <div class="eeg-circle"></div>
+                <div class="eeg-circle"></div>
+
+                <div class="eeg-core"></div>
+
+            </div>
+
         </div>
 
-        <div class="small">
-            최근 7일간의 수면 기록에서 수면 리듬이
-            비교적 일정하게 나타났습니다.
+    </div>
+
+
+    <div class="section card">
+
+        <div class="live-header">
+
+            <div>
+
+                <div class="card-title">
+                    LIVE EEG
+                </div>
+
+                <div
+                    id="liveStatus"
+                    class="live-status">
+
+                    측정 대기 중
+
+                </div>
+
+            </div>
+
+
+            <span class="small">
+                Fpz-Cz
+            </span>
+
+        </div>
+
+
+        <canvas
+            id="liveEEG"
+            class="eeg-canvas">
+        </canvas>
+
+
+        <div class="measure-controls">
+
+            <button
+                id="startMeasureBtn"
+                class="primary"
+                onclick="startMeasurement()">
+
+                ● 측정 시작
+
+            </button>
+
+            <button
+                class="secondary"
+                onclick="stopMeasurement()">
+
+                측정 종료
+
+            </button>
+
+        </div>
+
+
+        <div class="metrics">
+
+            <div class="metric">
+
+                <div class="metric-name">
+                    SAMPLING RATE
+                </div>
+
+                <div class="metric-value">
+                    100 Hz
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-name">
+                    SIGNAL
+                </div>
+
+                <div
+                    id="signalQuality"
+                    class="metric-value">
+
+                    GOOD
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-name">
+                    RECORDING
+                </div>
+
+                <div
+                    id="recordTime"
+                    class="metric-value">
+
+                    00:00
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-name">
+                    SAMPLES
+                </div>
+
+                <div
+                    id="sampleCount"
+                    class="metric-value">
+
+                    0
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="section grid grid2">
+
+        <div class="card">
+
+            <div class="card-title">
+                HOW IT WORKS
+            </div>
+
+            <div class="small">
+
+                ① EEG 장치 연결
+
+                <br>
+
+                ↓
+
+                <br>
+
+                ② 실시간 뇌파 측정
+
+                <br>
+
+                ↓
+
+                <br>
+
+                ③ 데이터 저장
+
+                <br>
+
+                ↓
+
+                <br>
+
+                ④ 수면 단계 분석
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                DATA PRIVACY
+            </div>
+
+            <div class="small">
+
+                EEG 데이터는 사용자 계정에 연결된
+                수면 기록으로 관리됩니다.
+
+                <br><br>
+
+                실제 서비스에서는 서버 암호화,
+                접근 권한 관리 및 개인정보 보호 정책을
+                함께 구현해야 합니다.
+
+            </div>
+
         </div>
 
     </div>
@@ -1239,10 +2359,13 @@ canvas {
 
 
 <!-- =========================================================
-     PAGE 2 — EEG
+     EEG ANALYSIS
 ========================================================= -->
 
-<section id="eeg" class="page hidden">
+<section
+    id="analysis"
+    class="page"
+    style="display:none">
 
     <div class="header">
 
@@ -1253,8 +2376,7 @@ canvas {
             </h1>
 
             <p>
-                뇌파 시계열 데이터를 수면 단계와
-                주파수 특성으로 분석합니다.
+                수집된 EEG 신호를 주파수와 수면 단계로 분석합니다.
             </p>
 
         </div>
@@ -1262,169 +2384,121 @@ canvas {
     </div>
 
 
-    <!-- UPLOAD -->
+    <div class="grid grid4">
 
-    <div class="card">
+        <div class="card">
 
-        <div class="upload">
+            <div class="card-title">
+                DELTA
+            </div>
 
-            <strong>
-                EEG 데이터 업로드
-            </strong>
+            <div class="big">
+                82%
+            </div>
 
-            CSV 형식의 EEG 데이터를 선택하세요.
-
-            <br>
-
-            <input
-                type="file"
-                id="eegFile"
-                accept=".csv"
-                onchange="loadEEG(event)"
-            >
-
-            <div
-                id="uploadStatus"
-                class="small">
-                현재는 프로토타입 분석 모드입니다.
+            <div class="small">
+                0.5–4 Hz
             </div>
 
         </div>
-
-    </div>
-
-
-    <!-- RAW EEG -->
-
-    <div class="section card">
-
-        <div class="section-header">
-
-            <h2>
-                Raw EEG Signal
-            </h2>
-
-            <span class="badge">
-                Fpz-Cz
-            </span>
-
-        </div>
-
-        <canvas id="eegCanvas"></canvas>
-
-    </div>
-
-
-    <!-- FREQUENCY -->
-
-    <div class="section card">
-
-        <div class="card-title">
-            EEG FREQUENCY BANDS
-        </div>
-
-        <div class="eeg-info">
-
-            <div class="band">
-
-                <div class="band-name">
-                    DELTA
-                </div>
-
-                <div
-                    class="band-value"
-                    id="deltaValue">
-                    82%
-                </div>
-
-                <div class="small">
-                    0.5–4 Hz
-                </div>
-
-            </div>
-
-
-            <div class="band">
-
-                <div class="band-name">
-                    THETA
-                </div>
-
-                <div
-                    class="band-value"
-                    id="thetaValue">
-                    61%
-                </div>
-
-                <div class="small">
-                    4–8 Hz
-                </div>
-
-            </div>
-
-
-            <div class="band">
-
-                <div class="band-name">
-                    ALPHA
-                </div>
-
-                <div
-                    class="band-value"
-                    id="alphaValue">
-                    32%
-                </div>
-
-                <div class="small">
-                    8–13 Hz
-                </div>
-
-            </div>
-
-
-            <div class="band">
-
-                <div class="band-name">
-                    BETA
-                </div>
-
-                <div
-                    class="band-value"
-                    id="betaValue">
-                    18%
-                </div>
-
-                <div class="small">
-                    13–30 Hz
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- STAGE -->
-
-    <div class="section grid grid-2">
 
 
         <div class="card">
 
             <div class="card-title">
-                CURRENT SLEEP STAGE
+                THETA
             </div>
 
-            <div
-                class="big-number"
-                id="currentStage">
+            <div class="big">
+                61%
+            </div>
+
+            <div class="small">
+                4–8 Hz
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                ALPHA
+            </div>
+
+            <div class="big">
+                32%
+            </div>
+
+            <div class="small">
+                8–13 Hz
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                BETA
+            </div>
+
+            <div class="big">
+                18%
+            </div>
+
+            <div class="small">
+                13–30 Hz
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="section card">
+
+        <div class="card-title">
+            SLEEP STAGE CLASSIFICATION
+        </div>
+
+        <div class="timeline">
+
+            <div class="stage awake" style="width:5%"></div>
+            <div class="stage light" style="width:22%"></div>
+            <div class="stage deep" style="width:17%"></div>
+            <div class="stage light" style="width:15%"></div>
+            <div class="stage rem" style="width:12%"></div>
+            <div class="stage light" style="width:11%"></div>
+            <div class="stage deep" style="width:8%"></div>
+            <div class="stage rem" style="width:10%"></div>
+
+        </div>
+
+        <div class="small">
+
+            30초 epoch 단위 수면 단계 분류 결과
+
+        </div>
+
+    </div>
+
+
+    <div class="section grid grid2">
+
+        <div class="card">
+
+            <div class="card-title">
+                CURRENT STAGE
+            </div>
+
+            <div class="big">
                 N2
             </div>
 
             <div class="small">
-                EEG 주파수 특성을 기반으로 분류된
-                현재 수면 단계입니다.
+                Theta activity가 상대적으로 증가한
+                얕은 수면 구간으로 분류되었습니다.
             </div>
 
         </div>
@@ -1445,13 +2519,13 @@ canvas {
                 <div>
 
                     <div class="alert-title">
-                        평소보다 각성 구간이 증가했습니다.
+                        각성 구간이 평소보다 증가
                     </div>
 
                     <div class="alert-text">
-                        최근 7일 평균과 비교하여
-                        각성 패턴의 증가가 관찰되었습니다.
-                        이는 의료적 진단이 아닙니다.
+                        개인의 최근 기록과 비교했을 때
+                        수면 중 각성 패턴이 증가했습니다.
+                        의료적 진단은 아닙니다.
                     </div>
 
                 </div>
@@ -1467,10 +2541,13 @@ canvas {
 
 
 <!-- =========================================================
-     PAGE 3 — SLEEP EEG PROFILE
+     PROFILE
 ========================================================= -->
 
-<section id="profile" class="page hidden">
+<section
+    id="profile"
+    class="page"
+    style="display:none">
 
     <div class="header">
 
@@ -1481,8 +2558,7 @@ canvas {
             </h1>
 
             <p>
-                여러 밤의 EEG 데이터를 이용해
-                개인적인 수면 특성을 추적합니다.
+                여러 밤의 EEG 데이터를 기반으로 나만의 수면 특성을 만듭니다.
             </p>
 
         </div>
@@ -1490,32 +2566,24 @@ canvas {
     </div>
 
 
-    <div class="grid grid-2">
-
+    <div class="grid grid2">
 
         <div class="card">
 
             <div class="card-title">
-                YOUR SLEEP PHENOTYPE
+                SLEEP PHENOTYPE
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 안정형 수면
             </div>
 
             <div class="small">
-                최근 7일간 수면단계 변화와
-                EEG 특징을 기반으로 한 프로토타입 분류입니다.
+                최근 7일간의 수면 단계와 EEG 특징을
+                종합한 프로토타입 분류입니다.
             </div>
 
-            <br>
-
-            <span class="badge">
-                PERSONAL PATTERN
-            </span>
-
         </div>
-
 
 
         <div class="card">
@@ -1527,28 +2595,18 @@ canvas {
 
             <div class="profile-grid">
 
-
                 <div class="profile-row">
 
-                    <div class="profile-header">
-
-                        <span>
-                            REM Stability
-                        </span>
-
-                        <b>
-                            72
-                        </b>
-
+                    <div class="profile-head">
+                        <span>REM Stability</span>
+                        <b>72</b>
                     </div>
 
                     <div class="progress">
-
                         <div
                             class="progress-bar"
                             style="width:72%">
                         </div>
-
                     </div>
 
                 </div>
@@ -1556,25 +2614,16 @@ canvas {
 
                 <div class="profile-row">
 
-                    <div class="profile-header">
-
-                        <span>
-                            Deep Sleep
-                        </span>
-
-                        <b>
-                            67
-                        </b>
-
+                    <div class="profile-head">
+                        <span>Deep Sleep</span>
+                        <b>67</b>
                     </div>
 
                     <div class="progress">
-
                         <div
                             class="progress-bar"
                             style="width:67%">
                         </div>
-
                     </div>
 
                 </div>
@@ -1582,25 +2631,16 @@ canvas {
 
                 <div class="profile-row">
 
-                    <div class="profile-header">
-
-                        <span>
-                            Sleep Rhythm
-                        </span>
-
-                        <b>
-                            81
-                        </b>
-
+                    <div class="profile-head">
+                        <span>Sleep Rhythm</span>
+                        <b>81</b>
                     </div>
 
                     <div class="progress">
-
                         <div
                             class="progress-bar"
                             style="width:81%">
                         </div>
-
                     </div>
 
                 </div>
@@ -1608,25 +2648,16 @@ canvas {
 
                 <div class="profile-row">
 
-                    <div class="profile-header">
-
-                        <span>
-                            Awakening Stability
-                        </span>
-
-                        <b>
-                            54
-                        </b>
-
+                    <div class="profile-head">
+                        <span>Awakening</span>
+                        <b>54</b>
                     </div>
 
                     <div class="progress">
-
                         <div
                             class="progress-bar"
                             style="width:54%">
                         </div>
-
                     </div>
 
                 </div>
@@ -1638,23 +2669,11 @@ canvas {
     </div>
 
 
-
-    <!-- PERSONAL EEG -->
-
     <div class="section card">
 
-        <div class="section-header">
-
-            <h2>
-                Personal EEG Characteristics
-            </h2>
-
-            <span class="badge">
-                PATTERN DETECTED
-            </span>
-
+        <div class="card-title">
+            PERSONAL EEG CHARACTERISTICS
         </div>
-
 
         <div class="alert">
 
@@ -1665,51 +2684,15 @@ canvas {
             <div>
 
                 <div class="alert-title">
-                    N3 진입 과정에서 Delta activity가 증가하는 경향
+                    N3 진입 과정에서 Delta activity 증가
                 </div>
 
                 <div class="alert-text">
-                    여러 수면 기록에서 반복적으로 관찰된
-                    개인의 EEG 특징입니다.
-                    이 결과는 질병 진단이 아니라
-                    데이터 기반 패턴 분석입니다.
+                    여러 기록에서 반복적으로 나타난
+                    개인의 EEG 패턴을 추적하고 있습니다.
                 </div>
 
             </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- PROCESS -->
-
-    <div class="section card">
-
-        <div class="card-title">
-            HOW YOUR PROFILE IS CREATED
-        </div>
-
-        <div class="small">
-
-            EEG 데이터
-
-            →
-
-            주파수 특성 분석
-
-            →
-
-            30초 단위 수면단계 분류
-
-            →
-
-            여러 날의 패턴 비교
-
-            →
-
-            Sleep Fingerprint 생성
 
         </div>
 
@@ -1720,10 +2703,13 @@ canvas {
 
 
 <!-- =========================================================
-     PAGE 4 — PERSONALIZED SLEEP
+     PERSONALIZED
 ========================================================= -->
 
-<section id="personal" class="page hidden">
+<section
+    id="personal"
+    class="page"
+    style="display:none">
 
     <div class="header">
 
@@ -1734,16 +2720,13 @@ canvas {
             </h1>
 
             <p>
-                나의 수면 데이터를 기반으로
-                생활 조건을 실험하고 변화를 확인합니다.
+                나의 수면 데이터를 이용해 생활 조건을 비교해보세요.
             </p>
 
         </div>
 
     </div>
 
-
-    <!-- WHAT IF -->
 
     <div class="card">
 
@@ -1752,36 +2735,32 @@ canvas {
         </div>
 
         <h2>
-            취침 시간을 조정하면 어떻게 될까요?
+            취침 시간을 바꿔본다면?
         </h2>
 
-        <br>
+
+        <input
+            id="sleepSlider"
+            class="slider"
+            type="range"
+            min="-90"
+            max="90"
+            value="0"
+            step="30"
+            oninput="simulateSleep()"
+        >
 
 
-        <div class="simulator">
+        <div
+            id="sliderText"
+            class="small">
 
-            <input
-                id="sleepSlider"
-                class="slider"
-                type="range"
-                min="-90"
-                max="90"
-                value="0"
-                step="30"
-                oninput="simulateSleep()"
-            >
-
-
-            <span
-                id="sliderText"
-                class="small">
-                현재 취침 시간 유지
-            </span>
+            현재 취침 시간 유지
 
         </div>
 
 
-        <div class="sim-result">
+        <div class="simulator section">
 
             <div class="small">
                 예상 수면 리듬 안정성
@@ -1789,7 +2768,7 @@ canvas {
 
             <div
                 id="simScore"
-                class="big-number">
+                class="sim-score">
 
                 81
 
@@ -1797,16 +2776,9 @@ canvas {
 
             <div
                 id="simChange"
-                class="sim-arrow">
+                class="sim-change">
 
                 현재 패턴 기준
-
-            </div>
-
-            <div class="small">
-
-                ※ 실제 수면 결과를 보장하지 않는
-                실험적 시뮬레이션입니다.
 
             </div>
 
@@ -1815,18 +2787,13 @@ canvas {
     </div>
 
 
-
-    <!-- RECOMMENDATION -->
-
-    <div class="section grid grid-2">
-
+    <div class="section grid grid2">
 
         <div class="card">
 
             <div class="card-title">
-                PERSONALIZED RECOMMENDATION
+                PERSONAL RECOMMENDATION
             </div>
-
 
             <div class="alert">
 
@@ -1837,97 +2804,80 @@ canvas {
                 <div>
 
                     <div class="alert-title">
-                        취침 시간을 일정하게 유지해보세요.
+                        일정한 취침 시간을 우선적으로 유지
                     </div>
 
                     <div class="alert-text">
-                        최근 기록에서 취침 시간 변동과
-                        수면 리듬 변화를 함께 관찰할 수 있습니다.
+                        개인 데이터에서 관찰되는
+                        수면 리듬 변화를 기준으로 제안합니다.
                     </div>
 
                 </div>
 
             </div>
 
-
-            <br>
-
-
-            <button
-                class="primary"
-                onclick="startExperiment()">
-
-                이 조건으로 수면 실험 시작
-
-            </button>
-
         </div>
-
 
 
         <div class="card">
 
             <div class="card-title">
-                EXPERIMENT TRACKING
+                EXPERIMENT
             </div>
 
-            <div class="big-number">
-                3 nights
+            <div class="big">
+                3 Nights
             </div>
 
             <div class="small">
-                추천 조건을 적용한 후 EEG를 다시 측정하여
-                이전 수면 패턴과 비교합니다.
+                조건을 적용한 뒤 EEG 데이터를 다시 측정하여
+                변화 여부를 비교합니다.
             </div>
+
+            <br>
+
+            <button
+                class="primary"
+                onclick="startExperiment()">
+
+                수면 실험 시작
+
+            </button>
 
         </div>
 
     </div>
 
 
-
-    <!-- FEEDBACK LOOP -->
-
     <div class="section card">
 
-        <div class="section-header">
-
-            <h2>
-                Personalized Feedback Loop
-            </h2>
-
+        <div class="card-title">
+            PERSONALIZED FEEDBACK LOOP
         </div>
-
 
         <div class="small">
 
-            <b>01</b>
             EEG 측정
 
             →
 
-            <b>02</b>
-            수면 패턴 분석
+            패턴 분석
 
             →
 
-            <b>03</b>
-            개인 맞춤 조건 제안
+            개인화 제안
 
             →
 
-            <b>04</b>
             생활 적용
 
             →
 
-            <b>05</b>
             EEG 재측정
 
             →
 
-            <b>06</b>
-            변화 검증
+            변화 비교
 
         </div>
 
@@ -1938,10 +2888,13 @@ canvas {
 
 
 <!-- =========================================================
-     PAGE 5 — HISTORY
+     HISTORY
 ========================================================= -->
 
-<section id="history" class="page hidden">
+<section
+    id="history"
+    class="page"
+    style="display:none">
 
     <div class="header">
 
@@ -1952,7 +2905,7 @@ canvas {
             </h1>
 
             <p>
-                시간에 따른 수면 패턴 변화를 확인합니다.
+                계정에 연결된 수면 기록을 확인합니다.
             </p>
 
         </div>
@@ -1960,8 +2913,7 @@ canvas {
     </div>
 
 
-    <div class="grid grid-4">
-
+    <div class="grid grid4">
 
         <div class="card">
 
@@ -1969,7 +2921,7 @@ canvas {
                 AVG SLEEP
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 7h 18m
             </div>
 
@@ -1982,7 +2934,7 @@ canvas {
                 AVG REM
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 20%
             </div>
 
@@ -1995,7 +2947,7 @@ canvas {
                 AVG DEEP
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 16%
             </div>
 
@@ -2008,7 +2960,7 @@ canvas {
                 RHYTHM
             </div>
 
-            <div class="big-number">
+            <div class="big">
                 81
             </div>
 
@@ -2017,37 +2969,25 @@ canvas {
     </div>
 
 
-
-    <!-- TREND -->
-
     <div class="section card">
 
-        <div class="section-header">
-
-            <h2>
-                7-Day Sleep Trend
-            </h2>
-
+        <div class="card-title">
+            SLEEP SCORE TREND
         </div>
 
-        <canvas id="historyCanvas"></canvas>
+        <canvas
+            id="historyCanvas"
+            class="history-canvas">
+        </canvas>
 
     </div>
 
 
-
-    <!-- DATA TABLE -->
-
     <div class="section card">
 
-        <div class="section-header">
-
-            <h2>
-                Recent Records
-            </h2>
-
+        <div class="card-title">
+            RECENT RECORDS
         </div>
-
 
         <table class="table">
 
@@ -2055,130 +2995,48 @@ canvas {
 
                 <tr>
 
-                    <th>
-                        DATE
-                    </th>
-
-                    <th>
-                        SLEEP
-                    </th>
-
-                    <th>
-                        REM
-                    </th>
-
-                    <th>
-                        DEEP
-                    </th>
-
-                    <th>
-                        SCORE
-                    </th>
+                    <th>DATE</th>
+                    <th>SLEEP</th>
+                    <th>REM</th>
+                    <th>DEEP</th>
+                    <th>SCORE</th>
 
                 </tr>
 
             </thead>
 
-
             <tbody>
 
                 <tr>
-
-                    <td>
-                        08.28
-                    </td>
-
-                    <td>
-                        7h 42m
-                    </td>
-
-                    <td>
-                        21%
-                    </td>
-
-                    <td>
-                        17%
-                    </td>
-
-                    <td class="good">
-                        84
-                    </td>
-
+                    <td>08.28</td>
+                    <td>7h 42m</td>
+                    <td>21%</td>
+                    <td>17%</td>
+                    <td class="good">84</td>
                 </tr>
 
-
                 <tr>
-
-                    <td>
-                        08.27
-                    </td>
-
-                    <td>
-                        7h 15m
-                    </td>
-
-                    <td>
-                        19%
-                    </td>
-
-                    <td>
-                        15%
-                    </td>
-
-                    <td class="good">
-                        82
-                    </td>
-
+                    <td>08.27</td>
+                    <td>7h 15m</td>
+                    <td>19%</td>
+                    <td>15%</td>
+                    <td class="good">82</td>
                 </tr>
 
-
                 <tr>
-
-                    <td>
-                        08.26
-                    </td>
-
-                    <td>
-                        6h 58m
-                    </td>
-
-                    <td>
-                        17%
-                    </td>
-
-                    <td>
-                        13%
-                    </td>
-
-                    <td class="warning-text">
-                        75
-                    </td>
-
+                    <td>08.26</td>
+                    <td>6h 58m</td>
+                    <td>17%</td>
+                    <td>13%</td>
+                    <td>75</td>
                 </tr>
 
-
                 <tr>
-
-                    <td>
-                        08.25
-                    </td>
-
-                    <td>
-                        7h 31m
-                    </td>
-
-                    <td>
-                        20%
-                    </td>
-
-                    <td>
-                        16%
-                    </td>
-
-                    <td class="good">
-                        80
-                    </td>
-
+                    <td>08.25</td>
+                    <td>7h 31m</td>
+                    <td>20%</td>
+                    <td>16%</td>
+                    <td class="good">80</td>
                 </tr>
 
             </tbody>
@@ -2190,52 +3048,200 @@ canvas {
 </section>
 
 
-
 </main>
 
 </div>
 
 
-
 <!-- =========================================================
-     JAVASCRIPT
+     MODAL
 ========================================================= -->
+
+<div
+    id="modal"
+    class="modal">
+
+    <div class="modal-card">
+
+        <h2 id="modalTitle">
+            EEG 장치
+        </h2>
+
+        <p id="modalText">
+            장치를 연결합니다.
+        </p>
+
+        <div class="modal-actions">
+
+            <button
+                class="secondary"
+                onclick="closeModal()">
+
+                취소
+
+            </button>
+
+            <button
+                class="primary"
+                onclick="confirmModal()">
+
+                확인
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    id="toast"
+    class="toast">
+</div>
+
+
 
 <script>
 
-
 /* =========================================================
-   PAGE NAVIGATION
+   USER / LOGIN
 ========================================================= */
 
-function showPage(page, button) {
+let currentUser = {
+    name:"시윤",
+    email:"demo@sleepbio.app",
+    provider:"demo"
+};
+
+function loginWithEmail(){
+
+    const email =
+        document.getElementById("loginEmail").value;
+
+    if(!email){
+
+        showToast("이메일을 입력해주세요.");
+
+        return;
+    }
+
+    currentUser.email = email;
+
+    currentUser.provider = "email";
+
+    saveUser();
+
+    enterApp();
+
+}
+
+
+function socialLogin(provider){
+
+    /*
+     * 실제 서비스에서는 이 부분에
+     * OAuth 2.0 인증을 연결합니다.
+     *
+     * 예:
+     * Kakao OAuth
+     * Naver OAuth
+     * Google OAuth
+     * Apple Sign In
+     */
+
+    currentUser.provider = provider;
+
+    currentUser.email =
+        "user@" +
+        provider
+        .toLowerCase()
+        .replace("google","gmail")
+        + ".sleepbio";
+
+    saveUser();
+
+    showToast(
+        provider +
+        " 로그인 프로토타입입니다."
+    );
+
+    setTimeout(
+        enterApp,
+        600
+    );
+}
+
+
+function saveUser(){
+
+    localStorage.setItem(
+        "sleepbioUser",
+        JSON.stringify(currentUser)
+    );
+
+}
+
+
+function enterApp(){
+
+    document
+        .getElementById("loginScreen")
+        .style.opacity="0";
+
+    setTimeout(function(){
+
+        document
+            .getElementById("loginScreen")
+            .style.display="none";
+
+        document
+            .getElementById("app")
+            .classList.add("visible");
+
+        document
+            .getElementById("userEmail")
+            .innerText =
+            currentUser.email;
+
+    },500);
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(page,button){
 
     const pages = [
         "dashboard",
-        "eeg",
+        "collect",
+        "analysis",
         "profile",
         "personal",
         "history"
     ];
 
-
-    pages.forEach(function(id) {
+    pages.forEach(function(id){
 
         document
             .getElementById(id)
-            .classList.add("hidden");
+            .style.display="none";
 
     });
 
 
     document
         .getElementById(page)
-        .classList.remove("hidden");
+        .style.display="block";
 
 
     document
         .querySelectorAll(".menu button")
-        .forEach(function(btn) {
+        .forEach(function(btn){
 
             btn.classList.remove("active");
 
@@ -2245,14 +3251,14 @@ function showPage(page, button) {
     button.classList.add("active");
 
 
-    if(page === "eeg") {
+    if(page==="collect"){
 
-        drawEEG();
+        startLivePreview();
 
     }
 
 
-    if(page === "history") {
+    if(page==="history"){
 
         drawHistory();
 
@@ -2262,41 +3268,253 @@ function showPage(page, button) {
 
 
 /* =========================================================
-   EEG GRAPH
+   EEG COLLECTION
 ========================================================= */
 
-function drawEEG() {
+let eegConnected = false;
+
+let measuring = false;
+
+let eegAnimation;
+
+let recordingSeconds = 0;
+
+let sampleCount = 0;
+
+let timer;
+
+
+function connectEEG(){
+
+    /*
+     * 실제 하드웨어 연결 API가 들어갈 자리.
+     *
+     * 브라우저에서 EEG 장치를 사용하려면
+     * 해당 장치가 제공하는 SDK / Web Bluetooth /
+     * Web Serial 등의 방식이 필요합니다.
+     */
+
+    openModal(
+        "EEG 장치 연결",
+        "현재 프로토타입에서는 Demo 장치로 연결합니다. 실제 버전에서는 EEG 하드웨어 SDK 또는 Web Bluetooth/Serial API를 연결할 수 있습니다."
+    );
+
+}
+
+
+function confirmModal(){
+
+    closeModal();
+
+    eegConnected = true;
+
+    document
+        .getElementById("deviceDot")
+        .style.background="var(--green)";
+
+    document
+        .getElementById("deviceStatus")
+        .innerText =
+        "EEG 장치 연결됨";
+
+    document
+        .getElementById("connectionDot")
+        .classList.add("connected");
+
+    document
+        .getElementById("connectionText")
+        .innerText =
+        "EEG 장치가 연결되었습니다.";
+
+    showToast(
+        "EEG 장치가 연결되었습니다."
+    );
+
+}
+
+
+function startDemoEEG(){
+
+    eegConnected=true;
+
+    document
+        .getElementById("deviceDot")
+        .style.background="var(--green)";
+
+    document
+        .getElementById("deviceStatus")
+        .innerText =
+        "Demo EEG 연결됨";
+
+    document
+        .getElementById("connectionDot")
+        .classList.add("connected");
+
+    document
+        .getElementById("connectionText")
+        .innerText =
+        "Demo EEG 신호 사용 중";
+
+    startLivePreview();
+
+    showToast(
+        "Demo EEG 모드가 시작되었습니다."
+    );
+
+}
+
+
+function startMeasurement(){
+
+    if(!eegConnected){
+
+        showToast(
+            "먼저 EEG 장치를 연결해주세요."
+        );
+
+        return;
+    }
+
+    if(measuring) return;
+
+    measuring=true;
+
+    recordingSeconds=0;
+
+    sampleCount=0;
+
+    document
+        .getElementById("liveStatus")
+        .innerText =
+        "● LIVE EEG 측정 중";
+
+    document
+        .getElementById("liveStatus")
+        .classList.add("active");
+
+    timer=setInterval(function(){
+
+        recordingSeconds++;
+
+        sampleCount+=100;
+
+        const minutes =
+            String(
+                Math.floor(recordingSeconds/60)
+            ).padStart(2,"0");
+
+        const seconds =
+            String(
+                recordingSeconds%60
+            ).padStart(2,"0");
+
+        document
+            .getElementById("recordTime")
+            .innerText =
+            minutes+":"+seconds;
+
+        document
+            .getElementById("sampleCount")
+            .innerText =
+            sampleCount.toLocaleString();
+
+    },1000);
+
+    showToast(
+        "EEG 측정을 시작했습니다."
+    );
+
+}
+
+
+function stopMeasurement(){
+
+    if(!measuring){
+
+        showToast(
+            "현재 측정 중이 아닙니다."
+        );
+
+        return;
+    }
+
+    measuring=false;
+
+    clearInterval(timer);
+
+    document
+        .getElementById("liveStatus")
+        .innerText =
+        "측정 완료";
+
+    document
+        .getElementById("liveStatus")
+        .classList.remove("active");
+
+    /*
+     * 실제 버전에서는
+     * recordingBuffer를 서버 또는
+     * IndexedDB에 저장합니다.
+     */
+
+    localStorage.setItem(
+        "sleepbioLastEEG",
+        JSON.stringify({
+            duration:recordingSeconds,
+            samples:sampleCount,
+            created:new Date().toISOString()
+        })
+    );
+
+    showToast(
+        "EEG 데이터가 계정에 저장되었습니다."
+    );
+
+}
+
+
+/* =========================================================
+   LIVE EEG CANVAS
+========================================================= */
+
+function startLivePreview(){
 
     const canvas =
-        document.getElementById("eegCanvas");
-
+        document.getElementById("liveEEG");
 
     if(!canvas) return;
 
+    cancelAnimationFrame(eegAnimation);
+
+    animateEEG();
+
+}
+
+
+function animateEEG(){
+
+    const canvas =
+        document.getElementById("liveEEG");
+
+    if(!canvas) return;
 
     const ctx =
         canvas.getContext("2d");
 
-
     const width =
         canvas.clientWidth;
-
 
     const height =
         canvas.clientHeight;
 
-
     const ratio =
         window.devicePixelRatio || 1;
 
-
     canvas.width =
-        width * ratio;
-
+        width*ratio;
 
     canvas.height =
-        height * ratio;
-
+        height*ratio;
 
     ctx.setTransform(
         ratio,
@@ -2306,7 +3524,6 @@ function drawEEG() {
         0,
         0
     );
-
 
     ctx.clearRect(
         0,
@@ -2319,12 +3536,15 @@ function drawEEG() {
     /* GRID */
 
     ctx.strokeStyle =
-        "rgba(255,255,255,0.05)";
+        "rgba(255,255,255,.05)";
 
-    ctx.lineWidth = 1;
+    ctx.lineWidth=1;
 
-
-    for(let y=30; y<height; y+=40) {
+    for(
+        let y=30;
+        y<height;
+        y+=40
+    ){
 
         ctx.beginPath();
 
@@ -2337,69 +3557,58 @@ function drawEEG() {
     }
 
 
-    for(let x=0; x<width; x+=80) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(x,0);
-
-        ctx.lineTo(x,height);
-
-        ctx.stroke();
-
-    }
-
-
-    /* EEG */
+    /* SIGNAL */
 
     ctx.strokeStyle =
-        "#8b7cff";
+        "#8d7cff";
 
-    ctx.lineWidth = 1.5;
-
+    ctx.lineWidth=1.4;
 
     ctx.beginPath();
 
 
-    for(let x=0; x<width; x++) {
+    const t =
+        Date.now()/1000;
 
 
-        /*
-         * 프로토타입용 EEG-like signal
-         *
-         * 실제 버전에서는 이 부분을
-         * CSV EEG 데이터로 교체
-         */
+    for(
+        let x=0;
+        x<width;
+        x++
+    ){
 
         const delta =
-            Math.sin(x * 0.025) * 18;
+            Math.sin(
+                x*.025+t*.8
+            )*15;
 
         const theta =
-            Math.sin(x * 0.075) * 8;
+            Math.sin(
+                x*.09+t*1.2
+            )*7;
 
         const alpha =
-            Math.sin(x * 0.20) * 4;
+            Math.sin(
+                x*.22+t*1.7
+            )*3;
 
         const noise =
-            (Math.random() - 0.5) * 5;
-
-
-        const signal =
-            delta +
-            theta +
-            alpha +
-            noise;
-
+            Math.sin(
+                x*1.3+t*4
+            )*1.5;
 
         const y =
-            height / 2 + signal;
+            height/2+
+            delta+
+            theta+
+            alpha+
+            noise;
 
-
-        if(x === 0) {
+        if(x===0){
 
             ctx.moveTo(x,y);
 
-        } else {
+        }else{
 
             ctx.lineTo(x,y);
 
@@ -2407,162 +3616,102 @@ function drawEEG() {
 
     }
 
-
     ctx.stroke();
 
-}
 
-
-/* =========================================================
-   EEG CSV
-========================================================= */
-
-function loadEEG(event) {
-
-    const file =
-        event.target.files[0];
-
-
-    if(!file) return;
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload =
-        function(e) {
-
-
-            const text =
-                e.target.result;
-
-
-            const rows =
-                text
-                .split(/\r?\n/)
-                .filter(row => row.trim() !== "");
-
-
-            document
-                .getElementById("uploadStatus")
-                .innerText =
-                "업로드 완료 · " +
-                rows.length +
-                "개의 데이터 행을 확인했습니다.";
-
-
-            /*
-             * 실제 분석 모델이 연결되기 전까지는
-             * 업로드 데이터를 확인하고
-             * 프로토타입 그래프를 표시
-             */
-
-            drawEEG();
-
-
-            alert(
-                "EEG 데이터가 업로드되었습니다.\n\n" +
-                "현재 버전에서는 CSV 업로드 및 " +
-                "데이터 확인까지 구현되어 있습니다."
-            );
-
-        };
-
-
-    reader.readAsText(file);
+    eegAnimation =
+        requestAnimationFrame(
+            animateEEG
+        );
 
 }
 
 
 /* =========================================================
-   WHAT-IF SIMULATOR
+   WHAT IF
 ========================================================= */
 
-function simulateSleep() {
+function simulateSleep(){
 
     const value =
         Number(
-            document.getElementById("sleepSlider").value
+            document.getElementById(
+                "sleepSlider"
+            ).value
+        );
+
+    const text =
+        document.getElementById(
+            "sliderText"
+        );
+
+    const score =
+        document.getElementById(
+            "simScore"
+        );
+
+    const change =
+        document.getElementById(
+            "simChange"
         );
 
 
-    const text =
-        document.getElementById("sliderText");
+    if(value===0){
 
-
-    const score =
-        document.getElementById("simScore");
-
-
-    const change =
-        document.getElementById("simChange");
-
-
-    if(value === 0) {
-
-        text.innerText =
+        text.innerText=
             "현재 취침 시간 유지";
 
-        score.innerText =
-            "81";
+        score.innerText="81";
 
-        change.innerText =
+        change.innerText=
             "현재 패턴 기준";
 
         return;
-
     }
 
 
-    if(value < 0) {
+    if(value<0){
 
         const improvement =
             Math.round(
-                Math.abs(value) / 10
+                Math.abs(value)/10
             );
 
-
-        text.innerText =
-            Math.abs(value) +
+        text.innerText=
+            Math.abs(value)+
             "분 일찍 취침";
 
-
-        score.innerText =
+        score.innerText=
             Math.min(
                 95,
-                81 + improvement
+                81+improvement
             );
 
-
-        change.innerText =
-            "현재 패턴 대비 +" +
-            improvement +
+        change.innerText=
+            "현재 패턴 대비 +"+
+            improvement+
             " 예상";
 
-    } else {
+    }else{
 
         const decrease =
             Math.round(
-                value / 8
+                value/8
             );
 
-
-        text.innerText =
-            value +
+        text.innerText=
+            value+
             "분 늦게 취침";
 
-
-        score.innerText =
+        score.innerText=
             Math.max(
                 55,
-                81 - decrease
+                81-decrease
             );
 
-
-        change.innerText =
-            "현재 패턴 대비 -" +
-            decrease +
+        change.innerText=
+            "현재 패턴 대비 -"+
+            decrease+
             " 예상";
 
     }
@@ -2571,15 +3720,21 @@ function simulateSleep() {
 
 
 /* =========================================================
-   START EXPERIMENT
+   EXPERIMENT
 ========================================================= */
 
-function startExperiment() {
+function startExperiment(){
 
-    alert(
-        "수면 실험이 시작되었습니다.\n\n" +
-        "앞으로 3일 동안 선택한 조건을 적용하고 " +
-        "EEG 데이터를 기록한 뒤 전후 패턴을 비교합니다."
+    showToast(
+        "3일 수면 실험이 시작되었습니다."
+    );
+
+    localStorage.setItem(
+        "sleepbioExperiment",
+        JSON.stringify({
+            start:new Date().toISOString(),
+            nights:3
+        })
     );
 
 }
@@ -2589,38 +3744,32 @@ function startExperiment() {
    HISTORY GRAPH
 ========================================================= */
 
-function drawHistory() {
+function drawHistory(){
 
     const canvas =
-        document.getElementById("historyCanvas");
-
+        document.getElementById(
+            "historyCanvas"
+        );
 
     if(!canvas) return;
-
 
     const ctx =
         canvas.getContext("2d");
 
-
     const width =
         canvas.clientWidth;
-
 
     const height =
         canvas.clientHeight;
 
-
     const ratio =
         window.devicePixelRatio || 1;
 
+    canvas.width=
+        width*ratio;
 
-    canvas.width =
-        width * ratio;
-
-
-    canvas.height =
-        height * ratio;
-
+    canvas.height=
+        height*ratio;
 
     ctx.setTransform(
         ratio,
@@ -2631,7 +3780,6 @@ function drawHistory() {
         0
     );
 
-
     ctx.clearRect(
         0,
         0,
@@ -2640,7 +3788,7 @@ function drawHistory() {
     );
 
 
-    const data = [
+    const data=[
         68,
         71,
         75,
@@ -2651,13 +3799,14 @@ function drawHistory() {
     ];
 
 
-    /* GRID */
+    ctx.strokeStyle=
+        "rgba(255,255,255,.05)";
 
-    ctx.strokeStyle =
-        "rgba(255,255,255,0.05)";
-
-
-    for(let y=40; y<height; y+=40) {
+    for(
+        let y=30;
+        y<height;
+        y+=40
+    ){
 
         ctx.beginPath();
 
@@ -2670,90 +3819,140 @@ function drawHistory() {
     }
 
 
-    /* LINE */
+    ctx.strokeStyle=
+        "#8d7cff";
 
-    ctx.strokeStyle =
-        "#8b7cff";
-
-    ctx.lineWidth = 3;
+    ctx.lineWidth=3;
 
     ctx.beginPath();
 
 
-    data.forEach(function(value,index) {
+    data.forEach(
+        function(value,index){
 
+            const x=
+                30+
+                index*
+                (
+                    (width-60)/
+                    (data.length-1)
+                );
 
-        const x =
-            35 +
-            index *
-            (
-                (width - 70) /
-                (data.length - 1)
-            );
+            const y=
+                height-
+                25-
+                (value/100)*
+                (height-55);
 
+            if(index===0){
 
-        const y =
-            height -
-            30 -
-            (value / 100) *
-            (height - 70);
+                ctx.moveTo(x,y);
 
+            }else{
 
-        if(index === 0) {
+                ctx.lineTo(x,y);
 
-            ctx.moveTo(x,y);
-
-        } else {
-
-            ctx.lineTo(x,y);
+            }
 
         }
-
-    });
+    );
 
 
     ctx.stroke();
 
 
-    /* POINTS */
+    data.forEach(
+        function(value,index){
 
-    data.forEach(function(value,index) {
+            const x=
+                30+
+                index*
+                (
+                    (width-60)/
+                    (data.length-1)
+                );
 
+            const y=
+                height-
+                25-
+                (value/100)*
+                (height-55);
 
-        const x =
-            35 +
-            index *
-            (
-                (width - 70) /
-                (data.length - 1)
+            ctx.fillStyle="#fff";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                4,
+                0,
+                Math.PI*2
             );
 
+            ctx.fill();
 
-        const y =
-            height -
-            30 -
-            (value / 100) *
-            (height - 70);
+        }
+    );
 
-
-        ctx.fillStyle =
-            "#ffffff";
+}
 
 
-        ctx.beginPath();
+/* =========================================================
+   MODAL
+========================================================= */
 
-        ctx.arc(
-            x,
-            y,
-            4,
-            0,
-            Math.PI * 2
-        );
+function openModal(title,text){
 
-        ctx.fill();
+    document
+        .getElementById("modalTitle")
+        .innerText=title;
+
+    document
+        .getElementById("modalText")
+        .innerText=text;
+
+    document
+        .getElementById("modal")
+        .classList.add("show");
+
+}
 
 
-    });
+function closeModal(){
+
+    document
+        .getElementById("modal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText=message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=setTimeout(
+        function(){
+
+            toast.classList.remove("show");
+
+        },
+        2300
+    );
 
 }
 
@@ -2764,9 +3963,23 @@ function drawHistory() {
 
 window.addEventListener(
     "load",
-    function() {
+    function(){
 
-        drawEEG();
+        const saved =
+            localStorage.getItem(
+                "sleepbioUser"
+            );
+
+        if(saved){
+
+            currentUser=
+                JSON.parse(saved);
+
+            enterApp();
+
+        }
+
+        startLivePreview();
 
     }
 );
@@ -2774,11 +3987,9 @@ window.addEventListener(
 
 window.addEventListener(
     "resize",
-    function() {
+    function(){
 
-        drawEEG();
-
-        drawHistory();
+        startLivePreview();
 
     }
 );
